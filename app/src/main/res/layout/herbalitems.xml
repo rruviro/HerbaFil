@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="310dp"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="10dp"
+    app:cardBackgroundColor="@android:color/transparent">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@drawable/authentication_button">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="70dp"
+                android:layout_height="80dp"
+                android:layout_marginStart="20dp"
+                android:background="@drawable/curved"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="23dp"
+                android:layout_marginLeft="15dp"
+                android:textStyle="bold"
+                android:text="Ginger"
+                android:textSize="16dp"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:text="Commonly used to relieve nausea, improve digestion, and reduce inflammation."
+                android:textColor="#B3FFFFFF"
+                android:textSize="9dp"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toBottomOf="@+id/title" />
+
+            <TextView
+                android:id="@+id/verifiedICon"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_marginBottom="25dp"
+                android:layout_marginLeft="15dp"
+                android:background="@drawable/verify"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:text="Approved by DOH"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:textSize="8dp"
+                app:layout_constraintBottom_toBottomOf="@+id/verifiedICon"
+                app:layout_constraintStart_toEndOf="@+id/verifiedICon"
+                app:layout_constraintTop_toTopOf="@+id/verifiedICon" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</androidx.cardview.widget.CardView>
