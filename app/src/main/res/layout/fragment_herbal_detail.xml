@@ -27,10 +27,10 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/HerbsTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ginger"
+        android:text="Title"
         android:textColor="@color/white"
         android:textSize="15dp"
         android:textStyle="bold"
@@ -40,14 +40,15 @@
         app:layout_constraintTop_toTopOf="@+id/textView7" />
 
     <TextView
+        android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:alpha="0.9"
         android:text="Herbal Full Details"
         android:textColor="@color/white"
         android:textSize="12dp"
-        app:layout_constraintStart_toStartOf="@+id/textView8"
-        app:layout_constraintTop_toBottomOf="@+id/textView8" />
+        app:layout_constraintStart_toStartOf="@+id/HerbsTitle"
+        app:layout_constraintTop_toBottomOf="@+id/HerbsTitle" />
 
     <ScrollView
         android:layout_width="match_parent"
@@ -61,7 +62,7 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/image"
+                android:id="@+id/herbsImage"
                 android:layout_width="match_parent"
                 android:layout_height="260dp"
                 android:background="@color/white"
@@ -78,14 +79,14 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/herb"
                 app:layout_constraintStart_toStartOf="@+id/herbsDescription"
-                app:layout_constraintTop_toBottomOf="@+id/image" />
+                app:layout_constraintTop_toBottomOf="@+id/herbsImage" />
 
             <TextView
                 android:id="@+id/herbsTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
-                android:text="Ginger"
+                android:text="Title"
                 android:textColor="@color/primary"
                 android:textSize="20dp"
                 android:textStyle="bold"
@@ -100,7 +101,7 @@
                 android:alpha="0.5"
                 android:textSize="11dp"
                 android:textColor="@color/black"
-                android:text="Ginger is a flowering plant known for its rhizome, commonly referred to as ginger root or simply ginger, which is widely utilized as both a spice and in traditional medicine. It is a herbaceous perennial that grows annual pseudostems, which are false stems formed from the rolled bases of leaves, reaching about one meter in height and featuring narrow leaf blades. The plant produces inflorescences with flowers that have pale yellow petals with purple edges, emerging directly from the rhizome on separate shoots."
+                android:text="description"
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -123,6 +124,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="210dp"
                 android:layout_marginTop="10dp"
+                android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/benifitsTitle">
 
@@ -171,7 +173,7 @@
                 android:layout_width="230dp"
                 android:layout_height="100dp"
                 android:background="@drawable/reminder"
-                android:layout_marginTop="60dp"
+                android:layout_marginTop="5dp"
                 android:layout_marginStart="20dp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/stepCoreRecycleView" />
@@ -189,7 +191,6 @@
                 android:id="@+id/img"
                 android:layout_width="160dp"
                 android:layout_height="160dp"
-                android:layout_marginTop="50dp"
                 android:src="@drawable/herbdetimage"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/stepCoreRecycleView" />

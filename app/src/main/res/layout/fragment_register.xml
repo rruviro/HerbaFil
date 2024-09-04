@@ -12,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:alpha="0.6"
-        android:background="@drawable/authenticationbg"
+        android:background="@color/primary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,69 +31,102 @@
         android:id="@+id/logo"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginBottom="-70dp"
-        android:background="@color/black"
+        android:background="@drawable/circle"
+        android:src="@drawable/primarylogo"
         app:layout_constraintBottom_toTopOf="@+id/panel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/login"
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Register Now"
+        android:textColor="@color/primary"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="@+id/username"
+        app:layout_constraintTop_toTopOf="@+id/panel" />
+
+    <TextView
+        android:id="@+id/textView12"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:textColor="@color/primary"
+        android:textSize="12dp"
+        android:layout_marginTop="5dp"
+        android:text="Discover reliable information and effective usage guidelines for treating your health with herbs."
+        app:layout_constraintStart_toStartOf="@+id/textView11"
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
         android:elegantTextHeight="true"
         android:ems="10"
         android:hint="Username"
         android:inputType="text"
+        android:textColor="@color/black"
         android:textColorHint="#9C000000"
-        android:textSize="15dp"
+        android:textSize="13sp"
+        android:drawableLeft="@drawable/person"
+        android:drawablePadding="10dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo" />
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
     <EditText
         android:id="@+id/password"
         android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_height="50dp"
         android:elegantTextHeight="true"
         android:ems="10"
         android:hint="Password"
+        android:textColor="@color/black"
         android:inputType="textPassword"
         android:textColorHint="#9C000000"
-        android:textSize="15dp"
+        android:textSize="13sp"
+        android:drawableLeft="@drawable/authkey"
+        android:drawablePadding="10dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login" />
+        app:layout_constraintTop_toBottomOf="@+id/username" />
 
     <EditText
-        android:id="@+id/confirm"
+        android:id="@+id/confirm_password"
         android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_height="50dp"
         android:elegantTextHeight="true"
         android:ems="10"
         android:hint="Confirm Password"
+        android:textColor="@color/black"
         android:inputType="textPassword"
         android:textColorHint="#9C000000"
-        android:textSize="15dp"
+        android:textSize="13sp"
+        android:drawableLeft="@drawable/authkey"
+        android:drawablePadding="10dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/loginLayout"
+        android:id="@+id/loginButton"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
         android:background="@drawable/authentication_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirm">
+        app:layout_constraintTop_toBottomOf="@+id/confirm_password">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -102,10 +135,10 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Create"
+                android:text="Register"
                 android:textColor="@color/white"
-                android:textSize="10dp"
                 android:textStyle="bold"
+                android:textSize="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -119,22 +152,22 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="13dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/authentication_other"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/createLayout"
+        android:id="@+id/LoginButton"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:alpha="0.85"
         android:background="@drawable/authentication_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">\
+        app:layout_constraintTop_toBottomOf="@+id/textView">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

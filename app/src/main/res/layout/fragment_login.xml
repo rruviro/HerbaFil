@@ -4,16 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black"
+    android:background="@color/primary"
     tools:context=".LoginFragment">
 
-    <View
+    <ImageView
         android:id="@+id/backgroundImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:alpha="0.8"
-        android:background="@drawable/authenticationbg"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:scaleType="center"
+        android:background="@color/primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -31,47 +30,76 @@
         android:id="@+id/logo"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        android:layout_marginBottom="-70dp"
-        android:background="@color/white"
+        android:background="@drawable/circle"
         android:src="@drawable/primarylogo"
         app:layout_constraintBottom_toTopOf="@+id/panel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/login"
+    <TextView
+        android:id="@+id/textView11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Sign In"
+        android:textColor="@color/primary"
+        android:textSize="25dp"
+        android:textStyle="bold"
+        android:layout_marginTop="30dp"
+        app:layout_constraintStart_toStartOf="@+id/username"
+        app:layout_constraintTop_toTopOf="@+id/panel" />
+
+    <TextView
+        android:id="@+id/textView12"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
+        android:textColor="@color/primary"
+        android:textSize="12dp"
+        android:layout_marginTop="5dp"
+        android:text="Log in to your account to access our premium and high-quality herbal experience."
+        app:layout_constraintStart_toStartOf="@+id/textView11"
+        app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
         android:elegantTextHeight="true"
         android:ems="10"
         android:hint="Username"
         android:inputType="text"
+        android:textColor="@color/black"
         android:textColorHint="#9C000000"
-        android:textSize="15dp"
+        android:textSize="13sp"
+        android:drawableLeft="@drawable/person"
+        android:drawablePadding="10dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/logo" />
+        app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
     <EditText
         android:id="@+id/password"
         android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_height="50dp"
         android:elegantTextHeight="true"
         android:ems="10"
         android:hint="Password"
+        android:textColor="@color/black"
         android:inputType="textPassword"
         android:textColorHint="#9C000000"
-        android:textSize="15dp"
+        android:textSize="13sp"
+        android:drawableLeft="@drawable/authkey"
+        android:drawablePadding="10dp"
+        android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login" />
+        app:layout_constraintTop_toBottomOf="@+id/username" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/loginLayout"
+        android:id="@+id/loginButton"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginTop="20dp"
@@ -104,22 +132,22 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="13dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/authentication_other"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/loginButton" />
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/createLayout"
+        android:id="@+id/createButton"
         android:layout_width="300dp"
         android:layout_height="50dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:alpha="0.85"
         android:background="@drawable/authentication_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView">\
+        app:layout_constraintTop_toBottomOf="@+id/textView">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
