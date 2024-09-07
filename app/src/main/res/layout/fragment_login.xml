@@ -11,7 +11,9 @@
         android:id="@+id/backgroundImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="center"
+        android:scaleType="centerCrop"
+        android:src="@drawable/authenticationbg"
+        android:alpha="0.4"
         android:background="@color/primary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,16 +28,25 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
+    <View
         android:id="@+id/logo"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:background="@drawable/circle"
-        android:src="@drawable/primarylogo"
         app:layout_constraintBottom_toTopOf="@+id/panel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/primarylogo"
+        android:layout_marginRight="2dp"
+        app:layout_constraintBottom_toBottomOf="@+id/logo"
+        app:layout_constraintEnd_toEndOf="@+id/logo"
+        app:layout_constraintStart_toStartOf="@+id/logo"
+        app:layout_constraintTop_toTopOf="@+id/logo" />
 
     <TextView
         android:id="@+id/textView11"
@@ -98,6 +109,16 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/username" />
 
+    <TextView
+        android:id="@+id/eyeToggle"
+        android:layout_width="19dp"
+        android:layout_height="19dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/selector_eye"
+        app:layout_constraintBottom_toBottomOf="@+id/password"
+        app:layout_constraintEnd_toEndOf="@+id/password"
+        app:layout_constraintTop_toTopOf="@+id/password" />
+
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/loginButton"
         android:layout_width="300dp"
@@ -106,7 +127,7 @@
         android:background="@drawable/authentication_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password">\
+        app:layout_constraintTop_toBottomOf="@+id/password">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

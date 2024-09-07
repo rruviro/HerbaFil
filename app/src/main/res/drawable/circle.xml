@@ -1,7 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="oval">
-    <solid android:color="#FFFFFF"/> <!-- background color -->
-    <size android:width="100dp"
-        android:height="100dp"/> <!-- size of the circle -->
-</shape>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="150dp"
+    android:height="150dp"
+    android:viewportWidth="150"
+    android:viewportHeight="150">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:strokeColor="#FF0EAA72"
+        android:strokeWidth="1"
+        android:pathData="M75 0.5A74.5 74.5 0 1 0 75 149.5 74.5 74.5 0 1 0 75 0.5z"/>
+</vector>

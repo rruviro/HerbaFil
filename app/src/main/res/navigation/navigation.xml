@@ -33,12 +33,28 @@
         <action
             android:id="@+id/action_homeFragment_to_herbalDetailFragment"
             app:destination="@id/herbalDetailFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_scanITFragment"
+            app:destination="@id/scanITFragment" />
     </fragment>
     <fragment
         android:id="@+id/herbalDetailFragment"
         android:name="com.application.herbafill.HerbalDetailFragment"
         android:label="fragment_herbal_detail"
-        tools:layout="@layout/fragment_herbal_detail" />
+        tools:layout="@layout/fragment_herbal_detail" >
+        <action
+            android:id="@+id/action_herbalDetailFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/splashFragment"
         android:name="com.application.herbafill.SplashFragment"
@@ -52,5 +68,23 @@
         android:id="@+id/profileFragment"
         android:name="com.application.herbafill.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/searchFragment"
+        android:name="com.application.herbafill.SearchFragment"
+        android:label="fragment_search"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_herbalDetailFragment"
+            app:destination="@id/herbalDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/scanITFragment"
+        android:name="com.application.herbafill.ScanITFragment"
+        android:label="fragment_scan_it"
+        tools:layout="@layout/fragment_scan_it" />
 </navigation>

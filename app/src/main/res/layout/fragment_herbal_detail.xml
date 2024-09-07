@@ -17,9 +17,9 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView7"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:id="@+id/back"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
         android:layout_marginStart="20dp"
         android:background="@drawable/back"
         app:layout_constraintBottom_toBottomOf="@+id/view"
@@ -27,17 +27,17 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/HerbsTitle"
+        android:id="@+id/HerbTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Title"
         android:textColor="@color/white"
-        android:textSize="15dp"
+        android:textSize="13dp"
         android:textStyle="bold"
         android:layout_marginTop="-5dp"
-        android:layout_marginStart="10dp"
-        app:layout_constraintStart_toEndOf="@+id/textView7"
-        app:layout_constraintTop_toTopOf="@+id/textView7" />
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/back"
+        app:layout_constraintTop_toTopOf="@+id/back" />
 
     <TextView
         android:id="@+id/textView8"
@@ -46,13 +46,14 @@
         android:alpha="0.9"
         android:text="Herbal Full Details"
         android:textColor="@color/white"
-        android:textSize="12dp"
-        app:layout_constraintStart_toStartOf="@+id/HerbsTitle"
-        app:layout_constraintTop_toBottomOf="@+id/HerbsTitle" />
+        android:textSize="10dp"
+        app:layout_constraintStart_toStartOf="@+id/HerbTitle"
+        app:layout_constraintTop_toBottomOf="@+id/HerbTitle" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/view">
@@ -62,11 +63,11 @@
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/herbsImage"
+                android:id="@+id/herbImage"
                 android:layout_width="match_parent"
                 android:layout_height="260dp"
                 android:background="@color/white"
-                android:scaleX="1.2"
+                android:scaleType="center"
                 android:src="@drawable/ginger"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -78,11 +79,11 @@
                 android:layout_height="30dp"
                 android:layout_marginTop="20dp"
                 android:background="@drawable/herb"
-                app:layout_constraintStart_toStartOf="@+id/herbsDescription"
-                app:layout_constraintTop_toBottomOf="@+id/herbsImage" />
+                app:layout_constraintStart_toStartOf="@+id/herbDescription"
+                app:layout_constraintTop_toBottomOf="@+id/herbImage" />
 
             <TextView
-                android:id="@+id/herbsTitle"
+                android:id="@+id/herbTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
@@ -95,7 +96,7 @@
                 app:layout_constraintTop_toTopOf="@+id/IconHerb" />
 
             <TextView
-                android:id="@+id/herbsDescription"
+                android:id="@+id/herbDescription"
                 android:layout_width="310dp"
                 android:layout_height="wrap_content"
                 android:alpha="0.5"
@@ -105,7 +106,7 @@
                 android:layout_marginTop="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/herbsTitle" />
+                app:layout_constraintTop_toBottomOf="@+id/herbTitle" />
 
             <TextView
                 android:id="@+id/benifitsTitle"
@@ -116,14 +117,14 @@
                 android:textColor="@color/primary"
                 android:textSize="12dp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/herbsDescription"
-                app:layout_constraintTop_toBottomOf="@+id/herbsDescription" />
+                app:layout_constraintStart_toStartOf="@+id/herbDescription"
+                app:layout_constraintTop_toBottomOf="@+id/herbDescription" />
 
             <HorizontalScrollView
                 android:id="@+id/benifets"
                 android:layout_width="match_parent"
                 android:layout_height="210dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="20dp"
                 android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/benifitsTitle">
@@ -134,7 +135,7 @@
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/benifitHerb_RecycleView"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
                         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
@@ -156,17 +157,18 @@
                 android:textColor="@color/primary"
                 android:textSize="12dp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/herbsDescription"
+                app:layout_constraintStart_toStartOf="@+id/herbDescription"
                 app:layout_constraintTop_toBottomOf="@+id/benifets" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/stepCoreRecycleView"
-                android:layout_marginTop="10dp"
                 android:layout_width="310dp"
-                tools:listitem="@layout/herbdetstext"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:scrollbars="none"
                 app:layout_constraintStart_toStartOf="@+id/stepBystep"
-                app:layout_constraintTop_toBottomOf="@+id/stepBystep" />
+                app:layout_constraintTop_toBottomOf="@+id/stepBystep"
+                tools:listitem="@layout/herbdetstext" />
 
             <TextView
                 android:id="@+id/Resources"

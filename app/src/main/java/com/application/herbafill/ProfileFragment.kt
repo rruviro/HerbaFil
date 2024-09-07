@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.FileProvider
+import androidx.navigation.fragment.findNavController
 import com.application.herbafill.Model.Account
 import com.application.herbafill.databinding.FragmentProfileBinding
 import java.io.File
@@ -25,9 +26,13 @@ import java.util.Locale
 class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
-    private val REQUEST_IMAGE_CAPTURE = 1
-    private val REQUEST_PICK_IMAGE = 2
     private lateinit var currentPhotoPath: String
+
+    companion object {
+        private const val REQUEST_IMAGE_CAPTURE = 1
+        private const val REQUEST_PICK_IMAGE = 2
+        private const val REQUEST_IMAGE_CROP = 3
+    }
 
     private var details = Account(
         0,
@@ -46,6 +51,9 @@ class ProfileFragment : Fragment() {
         binding.imageButton.setImageResource(details.profileImage)
         binding.imageButton.setOnClickListener {
             showImageOptions()
+        }
+        binding.back.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_homeFragment)
         }
         return binding.root
     }
@@ -75,17 +83,7 @@ class ProfileFragment : Fragment() {
         dialogView.findViewById<TextView>(R.id.btn_cancel).setOnClickListener {
             dialog.dismiss()
         }
-//        val options = arrayOf("Take Photo", "Choose from Gallery", "Cancel")
-//        val builder = AlertDialog.Builder(requireContext())
-//        builder.setTitle("Select Action")
-//        builder.setItems(options) { _, which ->
-//            when (which) {
-//                0 -> dispatchTakePictureIntent()
-//                1 -> dispatchPickPictureIntent()
-//                2 -> return@setItems
-//            }
-//        }
-//        builder.show()
+
     }
 
     private fun dispatchTakePictureIntent() {
@@ -143,6 +141,28 @@ class ProfileFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun startCropImage(uri: Uri) {
+        val cropIntent = Intent("com.android.camera.action.CROP").apply {
+            setDataAndType(uri, "image/*")
+            putExtra("crop", "true")
+            putExtra("aspectX", 1)
+            putExtra("aspectY", 1)
+            putExtra("outputX", 512)
+            putExtra("outputY", 512)
+            putExtra("return-data", false)  // Set to false to use EXTRA_OUTPUT
+
+            // Create a file to store the cropped image
+            val croppedImageFile = createImageFile()
+            val croppedImageUri = FileProvider.getUriForFile(
+                requireContext(),
+                "${requireContext().packageName}.fileprovider",
+                croppedImageFile
+            )
+            putExtra(MediaStore.EXTRA_OUTPUT, croppedImageUri)
+        }
+        startActivityForResult(cropIntent, REQUEST_IMAGE_CROP)
     }
 
 }

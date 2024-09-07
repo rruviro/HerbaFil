@@ -1,8 +1,12 @@
 package com.application.herbafill.Model
 
-import android.media.Image
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 data class Herbals(
-    val title: String,
-    val description: String
-)
+    val herbID: Int,
+    val imageUrl: String,
+    val herbName: String,
+    val herbDescrip: String
+) : Parcelable

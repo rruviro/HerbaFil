@@ -6,7 +6,7 @@ import okhttp3.OkHttpClient
 import retrofit2.converter.gson.GsonConverterFactory
 
 object RetrofitClient {
-    private const val BASE_URL = "http://192.168.1.173/herbafilApi/login.php/"
+    private const val BASE_URL = "http://192.168.0.151/herbafilApi/"
 
     val instance: ApiService by lazy {
         val retrofit = Retrofit.Builder()
@@ -16,4 +16,5 @@ object RetrofitClient {
 
         retrofit.create(ApiService::class.java)
     }
+
 }

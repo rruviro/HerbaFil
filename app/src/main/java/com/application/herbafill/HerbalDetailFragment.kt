@@ -1,29 +1,31 @@
 package com.application.herbafill
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.herbafill.Adapter.HerbalBenifitAdapter
 import com.application.herbafill.Adapter.HerbalStepsAdapter
-import com.application.herbafill.Model.HerbalBenifits
-import com.application.herbafill.Model.HerbalDetail
-import com.application.herbafill.Model.HerbalSteps
+import com.application.herbafill.Api.RetrofitClient
+import com.application.herbafill.Model.Authentication.HerbalBenefitsResponse
+import com.application.herbafill.Model.Authentication.HerbalDetailResponse
+import com.application.herbafill.Model.Authentication.HerbalStepsResponse
 import com.application.herbafill.databinding.FragmentHerbalDetailBinding
+import com.bumptech.glide.Glide
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class HerbalDetailFragment : Fragment() {
 
     private lateinit var binding: FragmentHerbalDetailBinding
-    private lateinit var herbalBenifitAdapter: HerbalBenifitAdapter
-    private lateinit var herbalBenifits: MutableList<HerbalBenifits>
-
-    private var dets = HerbalDetail(
-        R.drawable.ginger,
-        "Ginger",
-        "Ginger is a flowering plant known for its rhizome, commonly referred to as ginger root or simply ginger, which is widely utilized as both a spice and in traditional medicine. It is a herbaceous perennial that grows annual pseudostems, which are false stems formed from the rolled bases of leaves, reaching about one meter in height and featuring narrow leaf blades. The plant produces inflorescences with flowers that have pale yellow petals with purple edges, emerging directly from the rhizome on separate shoots."
-    )
+    private lateinit var benefitAdapter: HerbalBenifitAdapter
+    private lateinit var stepsAdapter: HerbalStepsAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -31,33 +33,105 @@ class HerbalDetailFragment : Fragment() {
     ): View? {
         binding = FragmentHerbalDetailBinding.inflate(inflater, container, false)
 
-        binding.herbsTitle.text = dets.title
-        binding.HerbsTitle.text = dets.title
-        binding.herbsDescription.text = dets.description
+        val herbId = arguments?.getInt("herbId") ?: return binding.root
+        fetchHerbalBenefits(herbId)
+        fetchHerbalSteps(herbId)
+        fetchAndDisplayHerbalData(herbId)
 
-        binding.benifitHerbRecycleView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        herbalBenifits = mutableListOf(
-            HerbalBenifits(R.drawable.ginger, "May improve brain function and protect against Alzheimer’s disease."),
-            HerbalBenifits(R.drawable.ginger, "May help reduce cancer risk."),
-            HerbalBenifits(R.drawable.ginger, "May improve brain function and protect against Alzheimer’s disease.")
-        )
-        herbalBenifitAdapter = HerbalBenifitAdapter(herbalBenifits)
-        binding.benifitHerbRecycleView.adapter = herbalBenifitAdapter
-
-        setupRecyclerView()
+        binding.back.setOnClickListener {
+            findNavController().navigate(R.id.action_herbalDetailFragment_to_homeFragment)
+        }
 
         return binding.root
     }
 
-    private fun setupRecyclerView() {
-        val steps = listOf(
-            HerbalSteps("Preparation Step 1", listOf("Choose fresh ginger root that is firm, smooth, and free from mold.", "Peel the ginger before use.", "Cut or grate the ginger for different uses.")),
-            HerbalSteps("Preparation Step 2", listOf("Store ginger in a cool, dry place.", "Use ginger within a week for best freshness."))
-        )
+    private fun fetchAndDisplayHerbalData(herbId: Int) {
+        RetrofitClient.instance.getHerbalDetails(herbId).enqueue(object : Callback<List<HerbalDetailResponse>> {
+            override fun onResponse(
+                call: Call<List<HerbalDetailResponse>>,
+                response: Response<List<HerbalDetailResponse>>
+            ) {
+                if (response.isSuccessful) {
+                    val data = response.body() ?: emptyList()
+                    val item = data.find { it.herbId == herbId }
 
-        val adapter = HerbalStepsAdapter(steps)
-        binding.stepCoreRecycleView.layoutManager = LinearLayoutManager(requireContext())
-        binding.stepCoreRecycleView.adapter = adapter
+                    if (item != null) {
+                        binding.herbTitle.text = item.herbName
+                        binding.HerbTitle.text = item.herbName
+                        Glide.with(requireContext())
+                            .load(item.herbImage)
+                            .into(binding.herbImage)
+                        binding.herbDescription.text = item.herbDescription
+                    } else {
+                        Toast.makeText(context, "No data available for this herbId", Toast.LENGTH_SHORT).show()
+                    }
+                } else {
+                    Toast.makeText(requireContext(), "Error: ${response.message()}", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            override fun onFailure(call: Call<List<HerbalDetailResponse>>, t: Throwable) {
+                Toast.makeText(requireContext(), "Failure: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun fetchHerbalBenefits(herbId: Int) {
+        RetrofitClient.instance.getHerbalBenefits(herbId).enqueue(object : Callback<List<HerbalBenefitsResponse>> {
+            override fun onResponse(
+                call: Call<List<HerbalBenefitsResponse>>,
+                response: Response<List<HerbalBenefitsResponse>>
+            ) {
+                if (response.isSuccessful) {
+                    response.body()?.let { benefits ->
+                        Log.d("FETCH_BENEFITS", "Received benefits: $benefits")
+                        val filteredBenefits = benefits.filter { it.herbId == herbId }
+                        Log.d("FETCH_BENEFITS", "Filtered benefits: $filteredBenefits")
+                        benefitAdapter = HerbalBenifitAdapter(filteredBenefits)
+                        binding.benifitHerbRecycleView.adapter = benefitAdapter
+                    }
+                }
+            }
+
+            override fun onFailure(call: Call<List<HerbalBenefitsResponse>>, t: Throwable) {
+                // Handle failure
+            }
+        })
+    }
+
+    private fun fetchHerbalSteps(herbId: Int) {
+        RetrofitClient.instance.getHerbalSteps(herbId).enqueue(object : Callback<List<HerbalStepsResponse>> {
+            override fun onResponse(
+                call: Call<List<HerbalStepsResponse>>,
+                response: Response<List<HerbalStepsResponse>>
+            ) {
+                if (response.isSuccessful) {
+                    response.body()?.let { steps ->
+                        // Filter steps based on the herbId if needed
+                        val filteredSteps = steps.filter { it.herbId == herbId }
+
+                        // Log the fetched steps
+                        Log.d("HerbalSteps", "Fetched steps: $filteredSteps")
+
+                        if (filteredSteps.isEmpty()) {
+                            Log.d("HerbalSteps", "No steps available")
+                        } else {
+                            stepsAdapter = HerbalStepsAdapter(filteredSteps)
+                            binding.stepCoreRecycleView.layoutManager = LinearLayoutManager(context)
+                            binding.stepCoreRecycleView.adapter = stepsAdapter
+                            stepsAdapter.notifyDataSetChanged()
+                        }
+                    }
+                } else {
+                    Log.e("HerbalSteps", "Response failed with code: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<List<HerbalStepsResponse>>, t: Throwable) {
+                Log.e("HerbalSteps", "Fetch failed: ${t.message}")
+            }
+        })
     }
 
 }
+
