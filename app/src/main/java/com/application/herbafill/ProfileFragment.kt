@@ -7,16 +7,26 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.navigation.fragment.findNavController
+import com.application.herbafill.Api.RetrofitClient
 import com.application.herbafill.Model.Account
+import com.application.herbafill.Model.HerbalDetailResponse
+import com.application.herbafill.Model.UpdateResponse
 import com.application.herbafill.databinding.FragmentProfileBinding
+import com.bumptech.glide.Glide
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.io.File
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -34,28 +44,130 @@ class ProfileFragment : Fragment() {
         private const val REQUEST_IMAGE_CROP = 3
     }
 
-    private var details = Account(
-        0,
-        "Keilizon Matthew T. Centino",
-        R.drawable.meditation,
-        "keilizon",
-        "00"
-    )
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         binding = FragmentProfileBinding.inflate(inflater, container, false)
-        binding.name.text = details.name
-        binding.imageButton.setImageResource(details.profileImage)
+
+        val userID = arguments?.getInt("userID") ?: return binding.root
+        fetchData(userID)
+
         binding.imageButton.setOnClickListener {
             showImageOptions()
         }
-        binding.back.setOnClickListener {
-            findNavController().navigate(R.id.action_profileFragment_to_homeFragment)
+
+        binding.changeInfo.setOnClickListener {
+            showChangeInfo()
         }
+
+        //freeze page after navigating from other page as for now user's can only use back gesture
+        binding.back.setOnClickListener {
+//            findNavController().navigate(R.id.action_profileFragment_to_homeFragment)
+        }
+
         return binding.root
+    }
+
+    private var userDetails: Account? = null
+    private fun fetchData(userID: Int) {
+        RetrofitClient.instance.getUserDetails(userID)
+            .enqueue(object : Callback<Account> {
+                override fun onResponse(call: Call<Account>, response: Response<Account>) {
+                    if (response.isSuccessful) {
+                        userDetails = response.body()
+                        if (userDetails != null) {
+                            // Extract the username, password, and image
+                            val name = userDetails!!.name
+
+                            binding.name.text = name
+
+                            Glide.with(requireContext())
+                                .load(userDetails!!.userProfile)
+                                .into(binding.imageButton)
+
+                        } else {
+                            Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Toast.makeText(context, "Response not successful", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<Account>, t: Throwable) {
+                    Toast.makeText(context, "Connection Failed: ${t.message}", Toast.LENGTH_LONG).show()
+                }
+            })
+    }
+
+    private fun showChangeInfo() {
+        if (userDetails != null) {
+            val dialogView = layoutInflater.inflate(R.layout.infomation_dialog, null)
+
+            val dialogBuilder = AlertDialog.Builder(requireContext())
+                .setView(dialogView)
+
+            // Set initial values from userDetails
+            val nameEditText = dialogView.findViewById<EditText>(R.id.name)
+            val usernameEditText = dialogView.findViewById<EditText>(R.id.username)
+            val passwordEditText = dialogView.findViewById<EditText>(R.id.password)
+            val dialog = dialogBuilder.create()
+
+            nameEditText.setText(userDetails!!.name)
+            usernameEditText.setText(userDetails!!.username)
+            passwordEditText.setText(userDetails!!.password)
+
+            // Toggle password visibility
+            dialogView.findViewById<TextView>(R.id.eyeToggle).setOnClickListener {
+                if (passwordEditText.inputType == InputType.TYPE_TEXT_VARIATION_PASSWORD ||
+                    passwordEditText.inputType == (InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_CLASS_TEXT)) {
+                    passwordEditText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                } else {
+                    passwordEditText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                }
+                passwordEditText.setSelection(passwordEditText.text.length)
+            }
+
+            dialogView.findViewById<TextView>(R.id.deploy).setOnClickListener {
+                val updatedName = nameEditText.text.toString()
+                val updatedUsername = usernameEditText.text.toString()
+                val updatedPassword = passwordEditText.text.toString()
+                updateUserData(userDetails!!.userID, updatedName, updatedUsername, updatedPassword)
+                dialog.dismiss()
+            }
+
+            dialog.show()
+
+        } else {
+            Toast.makeText(context, "User details not available", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun updateUserData(userID: Int, name: String, username: String, password: String) {
+        RetrofitClient.instance.updateUserDetails(userID, name, username, password)
+            .enqueue(object : Callback<UpdateResponse> {
+                override fun onResponse(call: Call<UpdateResponse>, response: Response<UpdateResponse>) {
+                    if (response.isSuccessful) {
+                        val updateResponse = response.body()
+                        if (updateResponse != null) {
+                            if (updateResponse.status == "success") {
+                                Toast.makeText(context, updateResponse.message, Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(context, "Error: ${updateResponse.message}", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            Toast.makeText(context, "Response body is null", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Toast.makeText(context, "Failed to update data", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<UpdateResponse>, t: Throwable) {
+                    Toast.makeText(context, "Update failed: ${t.message}", Toast.LENGTH_LONG).show()
+                }
+            })
     }
 
     private fun showImageOptions() {

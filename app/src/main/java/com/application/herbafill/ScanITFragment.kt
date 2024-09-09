@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.application.herbafill.databinding.FragmentScanItBinding
-
 class ScanITFragment : Fragment() {
 
     private lateinit var binding: FragmentScanItBinding
@@ -15,7 +14,6 @@ class ScanITFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentScanItBinding.inflate(inflater, container, false)
-
         return binding.root
     }
 

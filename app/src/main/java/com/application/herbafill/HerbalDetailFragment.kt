@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.herbafill.Adapter.HerbalBenifitAdapter
 import com.application.herbafill.Adapter.HerbalStepsAdapter
 import com.application.herbafill.Api.RetrofitClient
-import com.application.herbafill.Model.Authentication.HerbalBenefitsResponse
-import com.application.herbafill.Model.Authentication.HerbalDetailResponse
-import com.application.herbafill.Model.Authentication.HerbalStepsResponse
+import com.application.herbafill.Model.HerbalBenefitsResponse
+import com.application.herbafill.Model.HerbalDetailResponse
+import com.application.herbafill.Model.HerbalStepsResponse
 import com.application.herbafill.databinding.FragmentHerbalDetailBinding
 import com.bumptech.glide.Glide
 import retrofit2.Call

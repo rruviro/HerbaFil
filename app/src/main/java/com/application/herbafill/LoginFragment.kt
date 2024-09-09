@@ -3,6 +3,7 @@ package com.application.herbafill
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -49,18 +50,14 @@ class LoginFragment : Fragment() {
         }
 
         binding.eyeToggle.setOnClickListener {
-            // Toggle the visibility of the password text
             if (binding.password.inputType == InputType.TYPE_TEXT_VARIATION_PASSWORD ||
                 binding.password.inputType == (InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_CLASS_TEXT)) {
-                // Set to visible
                 binding.password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
-                binding.eyeToggle.setBackgroundResource(R.drawable.ic_eye_open) // Change icon
+                binding.eyeToggle.setBackgroundResource(R.drawable.ic_eye_open)
             } else {
-                // Set to hidden
                 binding.password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
-                binding.eyeToggle.setBackgroundResource(R.drawable.ic_eye_closed) // Change icon
+                binding.eyeToggle.setBackgroundResource(R.drawable.ic_eye_closed)
             }
-            // Move the cursor to the end of the text
             binding.password.setSelection(binding.password.text.length)
         }
 
@@ -74,8 +71,10 @@ class LoginFragment : Fragment() {
                     if (response.isSuccessful) {
                         val loginResponse = response.body()
                         if (loginResponse?.status == "success") {
-                            Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
-                            findNavController().navigate(R.id.action_loginFragment_to_homeFragment)
+                            val bundle = Bundle().apply {
+                                putInt("userID", loginResponse.userID)
+                            }
+                            findNavController().navigate(R.id.action_loginFragment_to_homeFragment, bundle)
                         } else {
                             Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
                         }
@@ -85,7 +84,8 @@ class LoginFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
-                    Toast.makeText(context, "Connection Failed", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Connection Failed: ${t.message}", Toast.LENGTH_LONG).show()
+                    Log.e("LoginError", "Connection failed", t)
                 }
 
             })

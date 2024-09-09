@@ -7,9 +7,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.application.herbafill.Model.Authentication.HerbalBenefitsResponse
-import com.application.herbafill.Model.Authentication.HerbalDetailResponse
-import com.application.herbafill.Model.Authentication.HerbalStepsResponse
+import com.application.herbafill.Model.HerbalBenefitsResponse
+import com.application.herbafill.Model.HerbalDetailResponse
+import com.application.herbafill.Model.HerbalStepsResponse
 import com.application.herbafill.R
 import com.bumptech.glide.Glide
 

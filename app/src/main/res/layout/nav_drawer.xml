@@ -102,11 +102,11 @@
                     android:text="Username :"
                     android:textColor="#80000000"
                     android:textSize="10sp"
-                    app:layout_constraintBottom_toTopOf="@+id/textView9"
-                    app:layout_constraintStart_toStartOf="@+id/textView9" />
+                    app:layout_constraintBottom_toTopOf="@+id/name"
+                    app:layout_constraintStart_toStartOf="@+id/name" />
 
                 <TextView
-                    android:id="@+id/textView9"
+                    android:id="@+id/name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Jude Beyster Gaspar"

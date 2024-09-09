@@ -1,4 +1,4 @@
-package com.application.herbafill.Model.Authentication
+package com.application.herbafill.Model
 
 data class HerbalDetailResponse(
     val herbId: Int,

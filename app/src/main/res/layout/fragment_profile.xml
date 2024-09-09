@@ -39,7 +39,7 @@
         app:layout_constraintTop_toTopOf="@+id/view" />
 
     <TextView
-        android:id="@+id/changePassword"
+        android:id="@+id/changeInfo"
         android:layout_width="20dp"
         android:layout_height="20dp"
         android:background="@drawable/passkey"

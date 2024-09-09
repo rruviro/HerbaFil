@@ -1,17 +1,18 @@
 package com.application.herbafill.Api
 
-import com.application.herbafill.Model.Authentication.HerbalBenefitsResponse
-import com.application.herbafill.Model.Authentication.HerbalDetailResponse
-import com.application.herbafill.Model.Authentication.HerbalStepsResponse
+import com.application.herbafill.Model.Account
+import com.application.herbafill.Model.HerbalBenefitsResponse
+import com.application.herbafill.Model.HerbalDetailResponse
+import com.application.herbafill.Model.HerbalStepsResponse
 import com.application.herbafill.Model.Authentication.LoginResponse
 import com.application.herbafill.Model.Authentication.SignUpResponse
 import com.application.herbafill.Model.Herbals
+import com.application.herbafill.Model.UpdateResponse
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -23,15 +24,24 @@ interface ApiService {
         @Field("password") password: String
     ): Call<LoginResponse>
 
+    @GET("fetchable/getInformation.php")
+    fun getUserDetails(@Query("userID") userID: Int): Call<Account>
+
+    @FormUrlEncoded
+    @POST("updates/updateInfo.php")
+    fun updateUserDetails(
+        @Field("userID") userID: Int,
+        @Field("name") name: String,
+        @Field("username") username: String,
+        @Field("password") password: String
+    ): Call<UpdateResponse>
+
     @FormUrlEncoded
     @POST("createAcc.php")
     fun signUp(
         @Field("username") username: String,
         @Field("password") password: String
     ): Call<SignUpResponse>
-
-    @GET("fetchable/commonHerbs.php")
-    fun getHerbsByName(@Query("herbName") herbId: String): Call<List<Herbals>>
 
     @GET("insertion/herbs_details/insert.php?action=getHerbalDetails")
     fun getHerbalDetails(@Query("herbId") herbId: Int): Call<List<HerbalDetailResponse>>

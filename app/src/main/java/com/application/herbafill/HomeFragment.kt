@@ -2,10 +2,12 @@ package com.application.herbafill
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.GravityCompat
@@ -13,9 +15,13 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.herbafill.Adapter.HerbalAdapter
 import com.application.herbafill.Api.RetrofitClient
+import com.application.herbafill.Model.Account
 import com.application.herbafill.Model.Herbals
 import com.application.herbafill.databinding.FragmentHomeBinding
+import com.bumptech.glide.Glide
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.navigation.NavigationView
+import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,6 +39,12 @@ class HomeFragment : Fragment(), HerbalAdapter.OnItemClickListener {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         binding.herbalRecycleView.layoutManager = LinearLayoutManager(this.context)
 
+        val userID = arguments?.getInt("userID") ?: return binding.root
+        val bundle = Bundle().apply {
+            putInt("userID", userID)
+        }
+
+        fetchData(userID)
         fetchHerbs()
 
         binding.menu.setOnClickListener {
@@ -53,12 +65,12 @@ class HomeFragment : Fragment(), HerbalAdapter.OnItemClickListener {
 
         profileBtn.setOnClickListener {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
-            findNavController().navigate(R.id.action_homeFragment_to_profileFragment)
+            findNavController().navigate(R.id.action_homeFragment_to_profileFragment, bundle)
         }
 
         historyBtn.setOnClickListener {
             binding.drawerLayout.closeDrawer(GravityCompat.START)
-            findNavController().navigate(R.id.action_homeFragment_to_profileFragment)
+            findNavController().navigate(R.id.action_homeFragment_to_profileFragment, bundle)
         }
 
         binding.scanBtn.setOnClickListener {
@@ -75,6 +87,30 @@ class HomeFragment : Fragment(), HerbalAdapter.OnItemClickListener {
         }
 
         return binding.root
+    }
+
+    private var userDetails: Account? = null
+    private fun fetchData(userID: Int) {
+        RetrofitClient.instance.getUserDetails(userID)
+            .enqueue(object : Callback<Account> {
+                override fun onResponse(call: Call<Account>, response: Response<Account>) {
+                    if (response.isSuccessful) {
+                        userDetails = response.body()
+                        if (userDetails != null) {
+                            val headerView = binding.navigationView.getHeaderView(0)
+                            headerView?.findViewById<TextView>(R.id.name)?.text = userDetails?.name
+                        } else {
+                            Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Toast.makeText(context, "Response not successful", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<Account>, t: Throwable) {
+                    Toast.makeText(context, "Connection Failed: ${t.message}", Toast.LENGTH_LONG).show()
+                }
+            })
     }
 
     private fun fetchHerbs() {

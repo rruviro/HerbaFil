@@ -1,6 +1,7 @@
 package com.application.herbafill
 
 import android.os.Bundle
+import android.text.InputType
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -22,16 +23,37 @@ class RegisterFragment : Fragment() {
     ): View? {
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
 
+        binding.eyeToggle.setOnClickListener {
+            if (binding.password.inputType == InputType.TYPE_TEXT_VARIATION_PASSWORD ||
+                binding.password.inputType == (InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_CLASS_TEXT)) {
+                binding.password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                binding.confirmPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
+                binding.eyeToggle.setBackgroundResource(R.drawable.ic_eye_open)
+            } else {
+                binding.password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                binding.confirmPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD
+                binding.eyeToggle.setBackgroundResource(R.drawable.ic_eye_closed)
+            }
+            binding.password.setSelection(binding.password.text.length)
+        }
+
         binding.registerButton.setOnClickListener {
             val username = binding.username.text.toString().trim()
             val password = binding.password.text.toString().trim()
             val confirm_password = binding.confirmPassword.text.toString().trim()
 
             if (username.isEmpty() || password.isEmpty() || confirm_password.isEmpty()) {
-                Toast.makeText(requireContext(), "You're Required to input your credentials.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "You're required to input your credentials.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
+            // Check if passwords match
+            if (password != confirm_password) {
+                Toast.makeText(requireContext(), "Passwords do not match.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
+            // Proceed with user registration
             registerUser(username, password)
 
         }
