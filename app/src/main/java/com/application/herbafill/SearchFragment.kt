@@ -44,6 +44,15 @@ class SearchFragment : Fragment(), HerbalAdapter.OnItemClickListener {
             override fun afterTextChanged(s: Editable?) {}
         })
 
+        val userID = arguments?.getInt("userID") ?: return binding.root
+        val bundle = Bundle().apply {
+            putInt("userID", userID)
+        }
+
+        binding.back.setOnClickListener {
+            findNavController().navigate(R.id.action_searchFragment_to_homeFragment, bundle)
+        }
+
         return binding.root
     }
 

@@ -198,7 +198,6 @@
         android:layout_gravity="start"
         android:background="@color/primary"
         app:headerLayout="@layout/nav_drawer"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        tools:context=".HomeFragment" />
 
 </androidx.drawerlayout.widget.DrawerLayout>

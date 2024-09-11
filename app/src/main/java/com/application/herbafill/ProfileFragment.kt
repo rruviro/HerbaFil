@@ -52,6 +52,9 @@ class ProfileFragment : Fragment() {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
 
         val userID = arguments?.getInt("userID") ?: return binding.root
+        val bundle = Bundle().apply {
+            putInt("userID", userID)
+        }
         fetchData(userID)
 
         binding.imageButton.setOnClickListener {
@@ -62,9 +65,8 @@ class ProfileFragment : Fragment() {
             showChangeInfo()
         }
 
-        //freeze page after navigating from other page as for now user's can only use back gesture
         binding.back.setOnClickListener {
-//            findNavController().navigate(R.id.action_profileFragment_to_homeFragment)
+            findNavController().navigate(R.id.action_profileFragment_to_homeFragment, bundle)
         }
 
         return binding.root

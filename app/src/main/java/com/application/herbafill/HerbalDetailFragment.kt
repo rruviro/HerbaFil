@@ -38,8 +38,12 @@ class HerbalDetailFragment : Fragment() {
         fetchHerbalSteps(herbId)
         fetchAndDisplayHerbalData(herbId)
 
+        val userID = arguments?.getInt("userID") ?: return binding.root
+        val bundle = Bundle().apply {
+            putInt("userID", userID)
+        }
         binding.back.setOnClickListener {
-            findNavController().navigate(R.id.action_herbalDetailFragment_to_homeFragment)
+            findNavController().navigate(R.id.action_herbalDetailFragment_to_homeFragment, bundle)
         }
 
         return binding.root

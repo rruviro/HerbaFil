@@ -83,7 +83,7 @@ class HomeFragment : Fragment(), HerbalAdapter.OnItemClickListener {
         }
 
         binding.searchBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
+            findNavController().navigate(R.id.action_homeFragment_to_searchFragment, bundle)
         }
 
         return binding.root
@@ -132,8 +132,10 @@ class HomeFragment : Fragment(), HerbalAdapter.OnItemClickListener {
     }
 
     override fun onItemClick(herbals: Herbals) {
+        val userID = arguments?.getInt("userID")
         val bundle = Bundle().apply {
             putInt("herbId", herbals.herbID)
+            userID?.let { putInt("userID", it) }
         }
         findNavController().navigate(R.id.action_homeFragment_to_herbalDetailFragment, bundle)
     }

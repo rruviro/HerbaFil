@@ -27,6 +27,7 @@
             android:id="@+id/childBulletText_Recycle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             app:layout_constraintStart_toStartOf="@+id/StepTitle"
             app:layout_constraintTop_toBottomOf="@+id/StepTitle"
             tools:itemCount="2"
