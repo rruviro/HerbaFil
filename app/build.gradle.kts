@@ -54,6 +54,8 @@ dependencies {
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.protolite.well.known.types)
     implementation(libs.litert.support.api)
+    implementation(libs.litert)
+    implementation(libs.litert.metadata)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
