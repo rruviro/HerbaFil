@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.fragment.findNavController
 import com.application.herbafill.databinding.FragmentScanItBinding
 import org.tensorflow.lite.Interpreter
 import org.tensorflow.lite.support.image.TensorImage
@@ -29,7 +30,7 @@ class ScanITFragment : Fragment() {
 
     // Class names from the TFLite model metadata
     private val classNames = arrayOf(
-        "Akapulko", "Ampalaya", "Bawang", "Bayabas", "Lagundi",
+        "Akapulko", "Ampalaya", "Bayabas", "Bawang", "Lagundi",
         "Niyog-niyogan", "Sambong", "Tsaang Gubat", "Ulasimang Bato",
         "Yerba Buena"
     )
@@ -44,7 +45,7 @@ class ScanITFragment : Fragment() {
 
         // Initialize the TensorFlow Lite model
         try {
-            interpreter = Interpreter(loadModelFile("herb_classifier.tflite"))
+            interpreter = Interpreter(loadModelFile("classifier.tflite"))
             Toast.makeText(context, "Model loaded successfully!", Toast.LENGTH_SHORT).show()
         } catch (e: IOException) {
             e.printStackTrace()
@@ -87,16 +88,17 @@ class ScanITFragment : Fragment() {
         try {
             val inputStream = requireContext().contentResolver.openInputStream(uri)
             val bitmap = BitmapFactory.decodeStream(inputStream)
-            val resizedBitmap = Bitmap.createScaledBitmap(bitmap, 32, 32, true)
 
-            // Convert Bitmap to ByteBuffer
-            val inputBuffer = ByteBuffer.allocateDirect(4 * 32 * 32 * 3).apply {
+            // Assuming model input is (1, 224, 224, 3) for this example
+            val inputSize = 224
+            val inputBuffer = ByteBuffer.allocateDirect(4 * 1 * inputSize * inputSize * 3).apply {
                 order(ByteOrder.nativeOrder())
             }
             inputBuffer.rewind()
 
-            val intValues = IntArray(32 * 32)
-            resizedBitmap.getPixels(intValues, 0, 32, 0, 0, 32, 32)
+            val resizedBitmap = Bitmap.createScaledBitmap(bitmap, inputSize, inputSize, true)
+            val intValues = IntArray(inputSize * inputSize)
+            resizedBitmap.getPixels(intValues, 0, inputSize, 0, 0, inputSize, inputSize)
 
             // Normalize and add pixel data to the ByteBuffer
             for (pixel in intValues) {
@@ -134,7 +136,7 @@ class ScanITFragment : Fragment() {
             }
 
             // Show Toast with class probabilities
-            Toast.makeText(context, resultString, Toast.LENGTH_LONG).show()
+            //Toast.makeText(context, resultString, Toast.LENGTH_LONG).show()
 
             // Process results
             val maxIndex = outputArray.indices.maxByOrNull { outputArray[it] } ?: -1
@@ -142,16 +144,23 @@ class ScanITFragment : Fragment() {
             if (maxIndex != -1) {
                 val resultText = classNames[maxIndex]
                 binding.classificationResult.text = "Prediction: $resultText"
+
+                val bundle = Bundle().apply {
+                    putString("mlHerbName", resultText)
+                }
+                findNavController().navigate(R.id.action_scanITFragment_to_scanedDetailsFragment, bundle)
+
             } else {
                 binding.classificationResult.text = "Error: No valid prediction"
             }
+
+
 
         } catch (e: Exception) {
             e.printStackTrace()
             binding.classificationResult.text = "Error during classification: ${e.message}"
         }
     }
-
 
     @Throws(IOException::class)
     private fun loadModelFile(filename: String): ByteBuffer {
@@ -167,4 +176,5 @@ class ScanITFragment : Fragment() {
         super.onDestroyView()
         interpreter?.close() // Close only if interpreter is initialized
     }
+
 }

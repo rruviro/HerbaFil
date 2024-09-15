@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/splashFragment">
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.application.herbafill.LoginFragment"
@@ -62,7 +62,8 @@
         tools:layout="@layout/fragment_splash" >
         <action
             android:id="@+id/action_splashFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
+            app:destination="@id/loginFragment"
+            app:enterAnim="@android:anim/fade_in" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -89,5 +90,18 @@
         android:id="@+id/scanITFragment"
         android:name="com.application.herbafill.ScanITFragment"
         android:label="fragment_scan_it"
-        tools:layout="@layout/fragment_scan_it" />
+        tools:layout="@layout/fragment_scan_it" >
+        <action
+            android:id="@+id/action_scanITFragment_to_scanedDetailsFragment"
+            app:destination="@id/scanedDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/scanedDetailsFragment"
+        android:name="com.application.herbafill.ScanedDetailsFragment"
+        android:label="fragment_scaned_details"
+        tools:layout="@layout/fragment_scaned_details" >
+        <action
+            android:id="@+id/action_scanedDetailsFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
 </navigation>

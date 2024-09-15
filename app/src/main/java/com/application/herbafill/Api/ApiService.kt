@@ -7,6 +7,9 @@ import com.application.herbafill.Model.HerbalStepsResponse
 import com.application.herbafill.Model.Authentication.LoginResponse
 import com.application.herbafill.Model.Authentication.SignUpResponse
 import com.application.herbafill.Model.Herbals
+import com.application.herbafill.Model.MLBenefitsResponse
+import com.application.herbafill.Model.MLDetailsResponse
+import com.application.herbafill.Model.MLStepsResponse
 import com.application.herbafill.Model.UpdateResponse
 import retrofit2.Call
 import retrofit2.http.Field
@@ -54,5 +57,14 @@ interface ApiService {
 
     @GET("fetchable/commonHerbs.php")
     fun getHerbs(): Call<List<Herbals>>
+
+    @GET("insertion/mlHerbs_details/insert.php?action=getHerbalDetails")
+    fun getHerbalDetailsByName(@Query("mlHerbName") mlHerbName: String): Call<List<MLDetailsResponse>>
+
+    @GET("insertion/mlHerbs_details/insert.php?action=getHerbalBenefits")
+    fun getHerbalBenefitsByName(@Query("mlHerbName") mlHerbName: String): Call<List<MLBenefitsResponse>>
+
+    @GET("insertion/mlHerbs_details/insert.php?action=getHerbalSteps")
+    fun getHerbalStepsByName(@Query("mlHerbName") mlHerbName: String): Call<List<MLStepsResponse>>
 
 }
