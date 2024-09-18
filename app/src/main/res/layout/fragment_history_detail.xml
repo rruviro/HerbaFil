@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/white"
+    tools:context=".HistoryDetailFragment">
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/primary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/back"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="20dp"
+        android:background="@drawable/back"
+        app:layout_constraintBottom_toBottomOf="@+id/view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/HerbTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Title"
+        android:textColor="@color/white"
+        android:textSize="13dp"
+        android:textStyle="bold"
+        android:layout_marginTop="-5dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintStart_toEndOf="@+id/back"
+        app:layout_constraintTop_toTopOf="@+id/back" />
+
+    <TextView
+        android:id="@+id/textView8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0.9"
+        android:text="Herbal Full Details"
+        android:textColor="@color/white"
+        android:textSize="10dp"
+        app:layout_constraintStart_toStartOf="@+id/HerbTitle"
+        app:layout_constraintTop_toBottomOf="@+id/HerbTitle" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/view">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/herbImage"
+                android:layout_width="match_parent"
+                android:layout_height="260dp"
+                android:background="@color/white"
+                android:scaleType="center"
+                android:src="@drawable/ginger"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/IconHerb"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/herb"
+                app:layout_constraintStart_toStartOf="@+id/herbDescription"
+                app:layout_constraintTop_toBottomOf="@+id/herbImage" />
+
+            <TextView
+                android:id="@+id/herbTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="Title"
+                android:textColor="@color/primary"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/IconHerb"
+                app:layout_constraintStart_toEndOf="@+id/IconHerb"
+                app:layout_constraintTop_toTopOf="@+id/IconHerb" />
+
+            <TextView
+                android:id="@+id/herbDescription"
+                android:layout_width="310dp"
+                android:layout_height="wrap_content"
+                android:alpha="0.5"
+                android:textSize="11dp"
+                android:textColor="@color/black"
+                android:text="description"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/herbTitle" />
+
+            <TextView
+                android:id="@+id/benifitsTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="3 Proven Health Benefits of Ginger"
+                android:textColor="@color/primary"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/herbDescription"
+                app:layout_constraintTop_toBottomOf="@+id/herbDescription" />
+
+            <HorizontalScrollView
+                android:id="@+id/benifets"
+                android:layout_width="match_parent"
+                android:layout_height="210dp"
+                android:layout_marginTop="20dp"
+                android:orientation="horizontal"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/benifitsTitle">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/benifitHerb_RecycleView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:listitem="@layout/horizontalherbdets" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </HorizontalScrollView>
+
+            <TextView
+                android:id="@+id/stepBystep"
+                android:layout_width="310dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Step-by-step guide on how to use ginger for herbal medicine"
+                android:textColor="@color/primary"
+                android:textSize="12dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/herbDescription"
+                app:layout_constraintTop_toBottomOf="@+id/benifets" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/stepCoreRecycleView"
+                android:layout_width="310dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:scrollbars="none"
+                app:layout_constraintStart_toStartOf="@+id/stepBystep"
+                app:layout_constraintTop_toBottomOf="@+id/stepBystep"
+                tools:listitem="@layout/herbdetstext" />
+
+            <TextView
+                android:id="@+id/Resources"
+                android:layout_width="230dp"
+                android:layout_height="100dp"
+                android:background="@drawable/reminder"
+                android:layout_marginTop="5dp"
+                android:layout_marginStart="20dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/stepCoreRecycleView" />
+
+            <ImageView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="12dp"
+                android:src="@drawable/meditation"
+                app:layout_constraintBottom_toBottomOf="@+id/Resources"
+                app:layout_constraintStart_toStartOf="@id/Resources"
+                app:layout_constraintTop_toTopOf="@+id/Resources" />
+
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="160dp"
+                android:layout_height="160dp"
+                android:src="@drawable/herbdetimage"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/stepCoreRecycleView" />
+
+            <Space
+                android:id="@+id/space"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                app:layout_constraintTop_toBottomOf="@+id/img" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,34 +13,6 @@ import com.application.herbafill.Model.MLStepsResponse
 import com.application.herbafill.R
 import com.bumptech.glide.Glide
 
-class MLHerbalDetailAdapter(private val details: List<MLDetailsResponse>) :
-    RecyclerView.Adapter<MLHerbalDetailAdapter.HerbalDetailViewHolder>() {
-
-    class HerbalDetailViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val herbTitle: TextView = view.findViewById(R.id.HerbTitle)
-        val herbDescription: TextView = view.findViewById(R.id.herbDescription)
-        val herbImage: ImageView = view.findViewById(R.id.herbsBenifitDescription)
-    }
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HerbalDetailViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_herbal_detail, parent, false)
-        return HerbalDetailViewHolder(view)
-    }
-
-    override fun onBindViewHolder(holder: HerbalDetailViewHolder, position: Int) {
-        val detail = details[position]
-        holder.herbTitle.text = detail.mlHerbName
-        holder.herbDescription.text = detail.mlHerbDescription
-
-        Glide.with(holder.itemView.context)
-            .load(detail.mlHerbImageUrl)
-            .into(holder.herbImage)
-    }
-
-    override fun getItemCount(): Int = details.size
-}
-
 class MLHerbalBenifitAdapter(private val benefits: List<MLBenefitsResponse>) :
     RecyclerView.Adapter<MLHerbalBenifitAdapter.HerbalBenefitViewHolder>() {
 

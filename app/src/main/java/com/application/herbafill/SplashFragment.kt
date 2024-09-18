@@ -19,15 +19,12 @@ class SplashFragment : Fragment() {
     ): View? {
         binding = FragmentSplashBinding.inflate(inflater, container, false)
 
-        // Set initial alpha to 0 (completely transparent)
         binding.root.alpha = 0f
 
-        // Start the fade-in animation
         binding.root.animate()
-            .alpha(1f) // Fade in to fully opaque
-            .setDuration(1000) // Duration of the fade-in effect
+            .alpha(1f)
+            .setDuration(1000)
             .withEndAction {
-                // Start the timer after fade-in is complete
                 startTimer()
             }
 
@@ -37,11 +34,9 @@ class SplashFragment : Fragment() {
     private fun startTimer() {
         val timer = object : CountDownTimer(3000, 20) {
             override fun onTick(millisUntilFinished: Long) {
-                // You can update UI here if needed
             }
 
             override fun onFinish() {
-                // Navigate to the next fragment after the timer is done
                 findNavController().navigate(R.id.action_splashFragment_to_loginFragment)
             }
         }

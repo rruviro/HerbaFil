@@ -11,11 +11,20 @@ import com.application.herbafill.Model.MLBenefitsResponse
 import com.application.herbafill.Model.MLDetailsResponse
 import com.application.herbafill.Model.MLStepsResponse
 import com.application.herbafill.Model.UpdateResponse
+import com.application.herbafill.Model.UserHistory
+import com.application.herbafill.Model.UserHistoryResponse
+import com.application.herbafill.Model.UserProfile
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Part
 import retrofit2.http.Query
 
 interface ApiService {
@@ -30,6 +39,9 @@ interface ApiService {
     @GET("fetchable/getInformation.php")
     fun getUserDetails(@Query("userID") userID: Int): Call<Account>
 
+    @GET("fetchable/history_details/fetch.php")
+    fun getUserHistory(@Query("userID") userID: Int): Call<UserHistoryResponse>
+
     @FormUrlEncoded
     @POST("updates/updateInfo.php")
     fun updateUserDetails(
@@ -39,12 +51,25 @@ interface ApiService {
         @Field("password") password: String
     ): Call<UpdateResponse>
 
+    @Multipart
+    @POST("upload_image1.php")
+    fun uploadImage(
+        @Part image: MultipartBody.Part,
+        @Part("id") userId: RequestBody
+    ): Call<UpdateResponse>
+
     @FormUrlEncoded
     @POST("createAcc.php")
     fun signUp(
+        @Field("name") name: String,
         @Field("username") username: String,
         @Field("password") password: String
     ): Call<SignUpResponse>
+
+    @POST("insertion/history_details/insert.php")
+    fun insertUserHistory(
+        @Body userHistory: UserHistory
+    ): Call<UserHistory>
 
     @GET("insertion/herbs_details/insert.php?action=getHerbalDetails")
     fun getHerbalDetails(@Query("herbId") herbId: Int): Call<List<HerbalDetailResponse>>

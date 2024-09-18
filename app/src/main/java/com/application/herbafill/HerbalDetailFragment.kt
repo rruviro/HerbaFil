@@ -98,7 +98,6 @@ class HerbalDetailFragment : Fragment() {
             }
 
             override fun onFailure(call: Call<List<HerbalBenefitsResponse>>, t: Throwable) {
-                // Handle failure
             }
         })
     }
@@ -111,10 +110,8 @@ class HerbalDetailFragment : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     response.body()?.let { steps ->
-                        // Filter steps based on the herbId if needed
                         val filteredSteps = steps.filter { it.herbId == herbId }
 
-                        // Log the fetched steps
                         Log.d("HerbalSteps", "Fetched steps: $filteredSteps")
 
                         if (filteredSteps.isEmpty()) {

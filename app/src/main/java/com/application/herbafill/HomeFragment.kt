@@ -74,7 +74,7 @@ class HomeFragment : Fragment(), HerbalAdapter.OnItemClickListener {
         }
 
         binding.scanBtn.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_scanITFragment)
+            findNavController().navigate(R.id.action_homeFragment_to_scanFragment, bundle)
         }
 
         logoutBtn.setOnClickListener {

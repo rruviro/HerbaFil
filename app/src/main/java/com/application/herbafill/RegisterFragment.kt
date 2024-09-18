@@ -17,6 +17,7 @@ import retrofit2.Response
 
 class RegisterFragment : Fragment() {
     private lateinit var binding: FragmentRegisterBinding
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -24,8 +25,8 @@ class RegisterFragment : Fragment() {
         binding = FragmentRegisterBinding.inflate(inflater, container, false)
 
         binding.eyeToggle.setOnClickListener {
-            if (binding.password.inputType == InputType.TYPE_TEXT_VARIATION_PASSWORD ||
-                binding.password.inputType == (InputType.TYPE_TEXT_VARIATION_PASSWORD or InputType.TYPE_CLASS_TEXT)) {
+            val currentType = binding.password.inputType
+            if (currentType == InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_PASSWORD) {
                 binding.password.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
                 binding.confirmPassword.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD
                 binding.eyeToggle.setBackgroundResource(R.drawable.ic_eye_open)
@@ -38,34 +39,33 @@ class RegisterFragment : Fragment() {
         }
 
         binding.registerButton.setOnClickListener {
+            val name = binding.name.text.toString().trim()
             val username = binding.username.text.toString().trim()
             val password = binding.password.text.toString().trim()
-            val confirm_password = binding.confirmPassword.text.toString().trim()
+            val confirmPassword = binding.confirmPassword.text.toString().trim()
 
-            if (username.isEmpty() || password.isEmpty() || confirm_password.isEmpty()) {
+            if (name.isEmpty() || username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
                 Toast.makeText(requireContext(), "You're required to input your credentials.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Check if passwords match
-            if (password != confirm_password) {
+            if (password != confirmPassword) {
                 Toast.makeText(requireContext(), "Passwords do not match.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
 
-            // Proceed with user registration
-            registerUser(username, password)
-
+            registerUser(name, username, password)
         }
 
         binding.loginButton.setOnClickListener {
             findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
         }
+
         return binding.root
     }
 
-    private fun registerUser(username: String, password: String) {
-        RetrofitClient.instance.signUp(username, password)
+    private fun registerUser(name: String, username: String, password: String) {
+        RetrofitClient.instance.signUp(name, username, password)
             .enqueue(object : Callback<SignUpResponse> {
                 override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
                     if (response.isSuccessful) {
@@ -86,5 +86,4 @@ class RegisterFragment : Fragment() {
                 }
             })
     }
-
 }

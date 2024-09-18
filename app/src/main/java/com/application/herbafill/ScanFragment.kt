@@ -6,54 +6,71 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.FileProvider
 import androidx.navigation.fragment.findNavController
-import com.application.herbafill.databinding.FragmentScanItBinding
+import com.application.herbafill.databinding.FragmentScanBinding
 import org.tensorflow.lite.Interpreter
-import org.tensorflow.lite.support.image.TensorImage
-import org.tensorflow.lite.support.metadata.MetadataExtractor
+import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import java.nio.ByteBuffer
-import java.nio.channels.FileChannel
 import java.nio.ByteOrder
+import java.nio.channels.FileChannel
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-class ScanITFragment : Fragment() {
+class ScanFragment : Fragment() {
 
-    private lateinit var binding: FragmentScanItBinding
-    private val pickImageRequest = 1
+    private lateinit var binding: FragmentScanBinding
+    private lateinit var currentPhotoPath: String
 
-    // Class names from the TFLite model metadata
+    companion object {
+        private const val REQUEST_IMAGE_CAPTURE = 1
+        private const val REQUEST_PICK_IMAGE = 2
+    }
     private val classNames = arrayOf(
         "Akapulko", "Ampalaya", "Bayabas", "Bawang", "Lagundi",
         "Niyog-niyogan", "Sambong", "Tsaang Gubat", "Ulasimang Bato",
-        "Yerba Buena"
+        "Yerba Buena", "Unknown"
     )
 
-    private var interpreter: Interpreter? = null // Use nullable type for interpreter
+    private var interpreter: Interpreter? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentScanItBinding.inflate(inflater, container, false)
+        binding = FragmentScanBinding.inflate(inflater, container, false)
 
-        // Initialize the TensorFlow Lite model
+        val userID = arguments?.getInt("userID") ?: return binding.root
+        val childBundle = Bundle()
+        childBundle.putInt("userID", userID)
+
         try {
             interpreter = Interpreter(loadModelFile("classifier.tflite"))
-            Toast.makeText(context, "Model loaded successfully!", Toast.LENGTH_SHORT).show()
         } catch (e: IOException) {
             e.printStackTrace()
-            Toast.makeText(context, "Model loading failed!", Toast.LENGTH_SHORT).show()
         }
 
         binding.selectImageButton.setOnClickListener {
             openImagePicker()
+        }
+
+        binding.captureBtn.setOnClickListener {
+            captureImage()
+        }
+
+        binding.back.setOnClickListener {
+            findNavController().navigate(R.id.action_scanFragment_to_homeFragment, childBundle)
         }
 
         return binding.root
@@ -63,18 +80,61 @@ class ScanITFragment : Fragment() {
         val intent = Intent(Intent.ACTION_PICK).apply {
             type = "image/*"
         }
-        startActivityForResult(intent, pickImageRequest)
+        startActivityForResult(intent, REQUEST_PICK_IMAGE)
+    }
+
+    private fun captureImage() {
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        takePictureIntent.resolveActivity(requireActivity().packageManager)?.also {
+            val photoFile: File? = try {
+                createImageFile()
+            } catch (ex: IOException) {
+                null
+            }
+            photoFile?.also {
+                val photoURI: Uri = FileProvider.getUriForFile(
+                    requireContext(),
+                    "${requireContext().packageName}.fileprovider",
+                    it
+                )
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
+            }
+        }
+    }
+
+    private fun createImageFile(): File {
+        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val storageDir: File? = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        return File.createTempFile(
+            "JPEG_${timeStamp}_",
+            ".jpg",
+            storageDir
+        ).apply {
+            currentPhotoPath = absolutePath
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == pickImageRequest && resultCode == Activity.RESULT_OK) {
-            data?.data?.let { uri ->
-                binding.imageView.setImageURI(uri)
-                classifyImage(uri)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                REQUEST_IMAGE_CAPTURE -> {
+                    val file = File(currentPhotoPath)
+                    val uri = Uri.fromFile(file)
+                    binding.imageView.setImageURI(uri)
+                    classifyImage(uri)
+                }
+                REQUEST_PICK_IMAGE -> {
+                    data?.data?.let { uri ->
+                        binding.imageView.setImageURI(uri)
+                        classifyImage(uri)
+                    }
+                }
             }
         }
     }
+
 
     private fun classifyImage(uri: Uri) {
         if (interpreter == null) {
@@ -82,14 +142,12 @@ class ScanITFragment : Fragment() {
             return
         }
 
-        // Clear previous classification result
         binding.classificationResult.text = "Classifying..."
 
         try {
             val inputStream = requireContext().contentResolver.openInputStream(uri)
             val bitmap = BitmapFactory.decodeStream(inputStream)
 
-            // Assuming model input is (1, 224, 224, 3) for this example
             val inputSize = 224
             val inputBuffer = ByteBuffer.allocateDirect(4 * 1 * inputSize * inputSize * 3).apply {
                 order(ByteOrder.nativeOrder())
@@ -100,7 +158,6 @@ class ScanITFragment : Fragment() {
             val intValues = IntArray(inputSize * inputSize)
             resizedBitmap.getPixels(intValues, 0, inputSize, 0, 0, inputSize, inputSize)
 
-            // Normalize and add pixel data to the ByteBuffer
             for (pixel in intValues) {
                 val r = ((pixel shr 16) and 0xFF) / 255.0f
                 val g = ((pixel shr 8) and 0xFF) / 255.0f
@@ -110,45 +167,45 @@ class ScanITFragment : Fragment() {
                 inputBuffer.putFloat(b)
             }
 
-            // Create output buffer with correct shape
             val outputBuffer = ByteBuffer.allocateDirect(4 * classNames.size).apply {
                 order(ByteOrder.nativeOrder())
             }
             val outputArray = FloatArray(classNames.size)
 
-            // Run inference
             interpreter?.run(inputBuffer, outputBuffer)
 
-            // Convert output buffer to FloatArray
             outputBuffer.rewind()
             outputBuffer.asFloatBuffer().get(outputArray)
 
-            // Log output values
             outputArray.forEachIndexed { index, value ->
                 Log.d("ClassifyImage", "Class $index (${classNames.getOrElse(index) { "Unknown" }}) : $value")
             }
 
-            // Create a string to hold class probabilities
             val resultString = buildString {
                 outputArray.forEachIndexed { index, value ->
                     append("Class $index (${classNames.getOrElse(index) { "Unknown" }}) : $value\n")
                 }
             }
 
-            // Show Toast with class probabilities
-            //Toast.makeText(context, resultString, Toast.LENGTH_LONG).show()
-
-            // Process results
             val maxIndex = outputArray.indices.maxByOrNull { outputArray[it] } ?: -1
 
             if (maxIndex != -1) {
                 val resultText = classNames[maxIndex]
                 binding.classificationResult.text = "Prediction: $resultText"
 
-                val bundle = Bundle().apply {
-                    putString("mlHerbName", resultText)
+                val userID = arguments?.getInt("userID") ?: run {
+                    Toast.makeText(requireContext(), "User ID is missing", Toast.LENGTH_SHORT).show()
+                    return
                 }
-                findNavController().navigate(R.id.action_scanITFragment_to_scanedDetailsFragment, bundle)
+                val childBundle = Bundle()
+                childBundle.putString("mlHerbName", resultText)
+                childBundle.putInt("userID", userID)
+
+                if (childBundle.equals("Unknown")) {
+                    Toast.makeText(requireContext(), "This image is not valid, Plase try again with other Image", Toast.LENGTH_SHORT).show()
+                } else {
+                    findNavController().navigate(R.id.action_scanFragment_to_scanedDetailsFragment, childBundle)
+                }
 
             } else {
                 binding.classificationResult.text = "Error: No valid prediction"
@@ -174,7 +231,6 @@ class ScanITFragment : Fragment() {
 
     override fun onDestroyView() {
         super.onDestroyView()
-        interpreter?.close() // Close only if interpreter is initialized
+        interpreter?.close()
     }
-
 }

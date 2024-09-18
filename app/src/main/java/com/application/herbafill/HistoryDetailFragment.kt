@@ -12,20 +12,20 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.herbafill.Adapter.MLHerbalBenifitAdapter
 import com.application.herbafill.Adapter.MLHerbalStepsAdapter
 import com.application.herbafill.Api.RetrofitClient
-import com.application.herbafill.Model.Authentication.SignUpResponse
 import com.application.herbafill.Model.MLBenefitsResponse
 import com.application.herbafill.Model.MLDetailsResponse
 import com.application.herbafill.Model.MLStepsResponse
 import com.application.herbafill.Model.UserHistory
+import com.application.herbafill.databinding.FragmentHistoryDetailBinding
 import com.application.herbafill.databinding.FragmentScanedDetailsBinding
 import com.bumptech.glide.Glide
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class ScanedDetailsFragment : Fragment() {
+class HistoryDetailFragment : Fragment() {
 
-    private lateinit var binding: FragmentScanedDetailsBinding
+    private lateinit var binding: FragmentHistoryDetailBinding
     private lateinit var benefitAdapter: MLHerbalBenifitAdapter
     private lateinit var stepsAdapter: MLHerbalStepsAdapter
 
@@ -33,7 +33,7 @@ class ScanedDetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentScanedDetailsBinding.inflate(inflater, container, false)
+        binding = FragmentHistoryDetailBinding.inflate(inflater, container, false)
         val mlHerbName = arguments?.getString("mlHerbName") ?: return binding.root
         val userID = arguments?.getInt("userID") ?: return binding.root
         val childBundle = Bundle()
@@ -46,18 +46,16 @@ class ScanedDetailsFragment : Fragment() {
         fetchHerbalBenefits(mlHerbName)
         fetchHerbalSteps(mlHerbName)
 
-        val userHistory = UserHistory(userID = userID, mlHerbName = mlHerbName)
-        insert(userHistory)
-
         binding.back.setOnClickListener {
-            findNavController().navigate(R.id.action_scanedDetailsFragment_to_homeFragment, childBundle)
+            findNavController().navigate(R.id.action_historyDetailFragment_to_profileFragment, childBundle)
         }
 
         return binding.root
     }
 
     private fun fetchAndDisplayHerbalData(mlHerbName: String) {
-        RetrofitClient.instance.getHerbalDetailsByName(mlHerbName).enqueue(object : Callback<List<MLDetailsResponse>> {
+        RetrofitClient.instance.getHerbalDetailsByName(mlHerbName).enqueue(object :
+            Callback<List<MLDetailsResponse>> {
             override fun onResponse(
                 call: Call<List<MLDetailsResponse>>,
                 response: Response<List<MLDetailsResponse>>
@@ -87,7 +85,8 @@ class ScanedDetailsFragment : Fragment() {
     }
 
     private fun fetchHerbalBenefits(mlHerbName: String) {
-        RetrofitClient.instance.getHerbalBenefitsByName(mlHerbName).enqueue(object : Callback<List<MLBenefitsResponse>> {
+        RetrofitClient.instance.getHerbalBenefitsByName(mlHerbName).enqueue(object :
+            Callback<List<MLBenefitsResponse>> {
             override fun onResponse(
                 call: Call<List<MLBenefitsResponse>>,
                 response: Response<List<MLBenefitsResponse>>
@@ -113,7 +112,8 @@ class ScanedDetailsFragment : Fragment() {
     }
 
     private fun fetchHerbalSteps(mlHerbName: String) {
-        RetrofitClient.instance.getHerbalStepsByName(mlHerbName).enqueue(object : Callback<List<MLStepsResponse>> {
+        RetrofitClient.instance.getHerbalStepsByName(mlHerbName).enqueue(object :
+            Callback<List<MLStepsResponse>> {
             override fun onResponse(
                 call: Call<List<MLStepsResponse>>,
                 response: Response<List<MLStepsResponse>>
@@ -137,26 +137,6 @@ class ScanedDetailsFragment : Fragment() {
                 Log.e("HerbalSteps", "Fetch failed: ${t.message}")
             }
         })
-    }
-
-    private fun insert(userHistory: UserHistory) {
-        RetrofitClient.instance.insertUserHistory(userHistory)
-            .enqueue(object : Callback<UserHistory> {
-                override fun onResponse(call: Call<UserHistory>, response: Response<UserHistory>) {
-                    if (response.isSuccessful) {
-                        val responseBody = response.body()
-                        if (responseBody != null) {
-
-                        }
-                    } else {
-                        Toast.makeText(context, "Server error: ${response.code()}", Toast.LENGTH_SHORT).show()
-                    }
-                }
-
-                override fun onFailure(call: Call<UserHistory>, t: Throwable) {
-                    Toast.makeText(context, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
-                }
-            })
     }
 
 }

@@ -81,10 +81,14 @@ class SearchFragment : Fragment(), HerbalAdapter.OnItemClickListener {
     }
 
     override fun onItemClick(herbals: Herbals) {
-        val bundle = Bundle().apply {
-            putInt("herbId", herbals.herbID)
+        val userID = arguments?.getInt("userID") ?: run {
+            Toast.makeText(requireContext(), "User ID is missing", Toast.LENGTH_SHORT).show()
+            return
         }
-        findNavController().navigate(R.id.action_searchFragment_to_herbalDetailFragment, bundle)
+        val childBundle = Bundle()
+        childBundle.putInt("herbId", herbals.herbID)
+        childBundle.putInt("userID", userID)
+        findNavController().navigate(R.id.action_searchFragment_to_herbalDetailFragment, childBundle)
     }
 
 }
