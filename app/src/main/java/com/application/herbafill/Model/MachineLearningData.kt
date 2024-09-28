@@ -4,7 +4,9 @@ data class MLDetailsResponse(
     val mlHerbId: Int,
     val mlHerbName: String,
     val mlHerbDescription: String,
-    val mlHerbImageUrl: String
+    val mlHerbImageUrl: String,
+    val recommended: String,
+    val risky: String
 )
 
 data class MLBenefitsResponse(

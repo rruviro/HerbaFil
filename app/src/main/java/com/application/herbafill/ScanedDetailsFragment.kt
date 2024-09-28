@@ -68,6 +68,8 @@ class ScanedDetailsFragment : Fragment() {
                     if (item != null) {
                         binding.herbTitle.text = item.mlHerbName
                         binding.HerbTitle.text = item.mlHerbName
+                        binding.recommend.text = item.recommended
+                        binding.risky.text = item.risky
                         Glide.with(requireContext())
                             .load(item.mlHerbImageUrl)
                             .into(binding.herbImage)

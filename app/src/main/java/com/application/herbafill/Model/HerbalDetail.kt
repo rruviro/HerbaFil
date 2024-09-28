@@ -4,7 +4,9 @@ data class HerbalDetailResponse(
     val herbId: Int,
     val herbName: String,
     val herbDescription: String,
-    val herbImage: String
+    val herbImage: String,
+    val recommended: String,
+    val risky: String
 )
 
 data class HerbalBenefitsResponse(

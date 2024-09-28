@@ -62,6 +62,8 @@ class HerbalDetailFragment : Fragment() {
                     if (item != null) {
                         binding.herbTitle.text = item.herbName
                         binding.HerbTitle.text = item.herbName
+                        binding.recommend.text = item.recommended
+                        binding.risky.text = item.risky
                         Glide.with(requireContext())
                             .load(item.herbImage)
                             .into(binding.herbImage)
