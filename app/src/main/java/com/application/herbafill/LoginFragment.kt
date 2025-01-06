@@ -79,7 +79,7 @@ class LoginFragment : Fragment() {
                             Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(context, "Response not successful", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Low internet", Toast.LENGTH_SHORT)
                     }
                 }
 

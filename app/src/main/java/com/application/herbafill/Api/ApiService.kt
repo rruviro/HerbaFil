@@ -30,20 +30,20 @@ import retrofit2.http.Query
 interface ApiService {
 
     @FormUrlEncoded
-    @POST("login.php")
+    @POST("login")
     fun loginUser(
         @Field("username") username: String,
         @Field("password") password: String
     ): Call<LoginResponse>
 
-    @GET("fetchable/getInformation.php")
+    @GET("user")
     fun getUserDetails(@Query("userID") userID: Int): Call<Account>
 
-    @GET("fetchable/history_details/fetch.php")
+    @GET("getUserHistory")
     fun getUserHistory(@Query("userID") userID: Int): Call<UserHistoryResponse>
 
     @FormUrlEncoded
-    @POST("updates/updateInfo.php")
+    @POST("updateInfo")
     fun updateUserDetails(
         @Field("userID") userID: Int,
         @Field("name") name: String,
@@ -52,44 +52,44 @@ interface ApiService {
     ): Call<UpdateResponse>
 
     @Multipart
-    @POST("upload_image1.php")
+    @POST("upload_image1")
     fun uploadImage(
         @Part image: MultipartBody.Part,
         @Part("id") userId: RequestBody
     ): Call<UpdateResponse>
 
     @FormUrlEncoded
-    @POST("createAcc.php")
+    @POST("createAcc")
     fun signUp(
         @Field("name") name: String,
         @Field("username") username: String,
         @Field("password") password: String
     ): Call<SignUpResponse>
 
-    @POST("insertion/history_details/insert.php")
+    @POST("insert")
     fun insertUserHistory(
         @Body userHistory: UserHistory
     ): Call<UserHistory>
 
-    @GET("insertion/herbs_details/insert.php?action=getHerbalDetails")
-    fun getHerbalDetails(@Query("herbId") herbId: Int): Call<List<HerbalDetailResponse>>
+    @GET("getHerbalDetails")
+    fun getHerbalDetails(@Query("herbid") herbId: Int): Call<List<HerbalDetailResponse>>
 
-    @GET("insertion/herbs_details/insert.php?action=getHerbalBenefits")
-    fun getHerbalBenefits(@Query("herbId") herbId: Int): Call<List<HerbalBenefitsResponse>>
+    @GET("getHerbalBenefits")
+    fun getHerbalBenefits(@Query("herbid") herbId: Int): Call<List<HerbalBenefitsResponse>>
 
-    @GET("insertion/herbs_details/insert.php?action=getHerbalSteps")
-    fun getHerbalSteps(@Query("herbId") herbId: Int): Call<List<HerbalStepsResponse>>
+    @GET("getHerbalSteps")
+    fun getHerbalSteps(@Query("herbid") herbId: Int): Call<List<HerbalStepsResponse>>
 
-    @GET("fetchable/commonHerbs.php")
+    @GET("herbs")
     fun getHerbs(): Call<List<Herbals>>
 
-    @GET("insertion/mlHerbs_details/insert.php?action=getHerbalDetails")
+    @GET("ml_getHerbalDetails")
     fun getHerbalDetailsByName(@Query("mlHerbName") mlHerbName: String): Call<List<MLDetailsResponse>>
 
-    @GET("insertion/mlHerbs_details/insert.php?action=getHerbalBenefits")
+    @GET("ml_getHerbalBenefits")
     fun getHerbalBenefitsByName(@Query("mlHerbName") mlHerbName: String): Call<List<MLBenefitsResponse>>
 
-    @GET("insertion/mlHerbs_details/insert.php?action=getHerbalSteps")
+    @GET("ml_getHerbalSteps")
     fun getHerbalStepsByName(@Query("mlHerbName") mlHerbName: String): Call<List<MLStepsResponse>>
 
 }

@@ -103,7 +103,7 @@ class HomeFragment : Fragment(), HerbalAdapter.OnItemClickListener {
                             Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show()
                         }
                     } else {
-                        Toast.makeText(context, "Response not successful", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Response not successful", Toast.LENGTH_SHORT)
                     }
                 }
 
