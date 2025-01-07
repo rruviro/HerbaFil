@@ -42,6 +42,7 @@ class HerbalDetailFragment : Fragment() {
         val bundle = Bundle().apply {
             putInt("userID", userID)
         }
+
         binding.back.setOnClickListener {
             findNavController().navigate(R.id.action_herbalDetailFragment_to_homeFragment, bundle)
         }
@@ -57,17 +58,17 @@ class HerbalDetailFragment : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     val data = response.body() ?: emptyList()
-                    val item = data.find { it.herbId == herbId }
+                    val item = data.find { it.herbid == herbId }
 
                     if (item != null) {
-                        binding.herbTitle.text = item.herbName
-                        binding.HerbTitle.text = item.herbName
+                        binding.herbTitle.text = item.herbname
+                        binding.HerbTitle.text = item.herbname
                         binding.recommend.text = item.recommended
                         binding.risky.text = item.risky
                         Glide.with(requireContext())
-                            .load(item.herbImage)
+                            .load(item.herbimage)
                             .into(binding.herbImage)
-                        binding.herbDescription.text = item.herbDescription
+                        binding.herbDescription.text = item.herbdescription
                     } else {
                         Toast.makeText(context, "No data available for this herbId", Toast.LENGTH_SHORT).show()
                     }
@@ -91,7 +92,7 @@ class HerbalDetailFragment : Fragment() {
                 if (response.isSuccessful) {
                     response.body()?.let { benefits ->
                         Log.d("FETCH_BENEFITS", "Received benefits: $benefits")
-                        val filteredBenefits = benefits.filter { it.herbId == herbId }
+                        val filteredBenefits = benefits.filter { it.herbid == herbId }
                         Log.d("FETCH_BENEFITS", "Filtered benefits: $filteredBenefits")
                         benefitAdapter = HerbalBenifitAdapter(filteredBenefits)
                         binding.benifitHerbRecycleView.adapter = benefitAdapter
@@ -112,7 +113,7 @@ class HerbalDetailFragment : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     response.body()?.let { steps ->
-                        val filteredSteps = steps.filter { it.herbId == herbId }
+                        val filteredSteps = steps.filter { it.herbid == herbId }
 
                         Log.d("HerbalSteps", "Fetched steps: $filteredSteps")
 

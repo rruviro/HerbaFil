@@ -27,11 +27,11 @@ class UserHistoryAdapter(
 
     override fun onBindViewHolder(holder: UserHistoryViewHolder, position: Int) {
         val history = filteredHistoryList[position]
-        holder.titleText.text = history.mlHerbName
-        holder.descriptionText.text = history.mlLimitedDescript
+        holder.titleText.text = history.mlherbname
+        holder.descriptionText.text = history.mllimiteddescript
 
         Glide.with(holder.itemView.context)
-            .load(history.mlHerbImageUrl)
+            .load(history.mlherbimageurl)
             .into(holder.imageView)
 
         holder.itemView.setOnClickListener {
@@ -60,7 +60,7 @@ class UserHistoryAdapter(
                     historyList
                 } else {
                     historyList.filter { history ->
-                        history.mlHerbName.contains(query, ignoreCase = true)
+                        history.mlherbname.contains(query, ignoreCase = true)
                     }
                 }
 

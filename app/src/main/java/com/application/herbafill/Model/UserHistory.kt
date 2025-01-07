@@ -5,14 +5,14 @@ import kotlinx.parcelize.Parcelize
 
 data class UserHistory(
     val userID: Int,
-    val mlHerbName: String
+    val mlherbname: String
 )
 
 @Parcelize
 data class UserHistoryDetail(
-    val mlHerbName: String,
-    val mlLimitedDescript: String,
-    val mlHerbImageUrl: String
+    val mlherbname: String,
+    val mllimiteddescript: String,
+    val mlherbimageurl: String
 ) : Parcelable
 
 data class UserHistoryResponse(

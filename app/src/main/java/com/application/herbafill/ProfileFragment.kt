@@ -24,6 +24,7 @@ import androidx.core.net.toUri
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.herbafill.Adapter.UserHistoryAdapter
+import com.application.herbafill.Api.ApiService
 import com.application.herbafill.Api.RetrofitClient
 import com.application.herbafill.Model.Account
 import com.application.herbafill.Model.Herbals
@@ -41,6 +42,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
@@ -127,7 +129,7 @@ class ProfileFragment : Fragment(), UserHistoryAdapter.OnItemClickListener {
     override fun onItemClick(history: UserHistoryDetail) {
         val userID = arguments?.getInt("userID")
         val bundle = Bundle().apply {
-            putString("mlHerbName", history.mlHerbName)
+            putString("mlHerbName", history.mlherbname)
             userID?.let { putInt("userID", it) }
         }
         findNavController().navigate(R.id.action_profileFragment_to_historyDetailFragment, bundle)
@@ -366,18 +368,31 @@ class ProfileFragment : Fragment(), UserHistoryAdapter.OnItemClickListener {
         }
     }
 
-    // Upload image file to server
-    private fun uploadImageToServer(userID: Int, imageFile: File) {
-        val requestBody = RequestBody.create(MediaType.parse("image/*"), imageFile)
-        val body = MultipartBody.Part.createFormData("image", imageFile.name, requestBody)
-        val userIdRequestBody = RequestBody.create(MediaType.parse("text/plain"), userID.toString())
+    // Convert image file to Base64 binary string
+    private fun encodeImageToBase64(imageFile: File): String {
+        val byteArray = FileInputStream(imageFile).use { inputStream ->
+            val byteArray = ByteArray(imageFile.length().toInt())
+            inputStream.read(byteArray)
+            byteArray
+        }
+        return Base64.encodeToString(byteArray, Base64.DEFAULT)
+    }
 
-        RetrofitClient.instance.uploadImage(body,userIdRequestBody)
+    private fun uploadImageToServer(userID: Int, imageFile: File) {
+        // Convert the image file to Base64 string
+        val base64Image = encodeImageToBase64(imageFile)
+
+        // Create the request body
+        val uploadImageRequest = ApiService.UploadImageRequest(base64Image, userID)
+
+        // Call the API with the Base64 image and userId
+        RetrofitClient.instance.uploadImage(uploadImageRequest)
             .enqueue(object : Callback<UpdateResponse> {
                 override fun onResponse(call: Call<UpdateResponse>, response: Response<UpdateResponse>) {
                     if (response.isSuccessful && response.body()?.status == "success") {
-                        Toast.makeText(context, "Image uploaded and saved to database successfully!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, "Image uploaded successfully!", Toast.LENGTH_SHORT).show()
                     } else {
+                        Log.d("", userID.toString())
                         Toast.makeText(context, "Failed to upload image", Toast.LENGTH_SHORT).show()
                     }
                 }

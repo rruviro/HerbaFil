@@ -40,7 +40,7 @@ interface ApiService {
     fun getUserDetails(@Query("userID") userID: Int): Call<Account>
 
     @GET("getUserHistory")
-    fun getUserHistory(@Query("userID") userID: Int): Call<UserHistoryResponse>
+    fun getUserHistory(@Query("userid") userID: Int): Call<UserHistoryResponse>
 
     @FormUrlEncoded
     @POST("updateInfo")
@@ -51,11 +51,14 @@ interface ApiService {
         @Field("password") password: String
     ): Call<UpdateResponse>
 
-    @Multipart
-    @POST("upload_image1")
+    data class UploadImageRequest(
+        val userprofile: String,  // Base64 image string
+        val userid: Int           // User ID
+    )
+
+    @POST("update_userprofile")
     fun uploadImage(
-        @Part image: MultipartBody.Part,
-        @Part("id") userId: RequestBody
+        @Body uploadImageRequest: UploadImageRequest
     ): Call<UpdateResponse>
 
     @FormUrlEncoded
@@ -66,7 +69,7 @@ interface ApiService {
         @Field("password") password: String
     ): Call<SignUpResponse>
 
-    @POST("insert")
+    @POST("insertUserHistory")
     fun insertUserHistory(
         @Body userHistory: UserHistory
     ): Call<UserHistory>
@@ -84,12 +87,12 @@ interface ApiService {
     fun getHerbs(): Call<List<Herbals>>
 
     @GET("ml_getHerbalDetails")
-    fun getHerbalDetailsByName(@Query("mlHerbName") mlHerbName: String): Call<List<MLDetailsResponse>>
+    fun getHerbalDetailsByName(@Query("mlherbname") mlHerbName: String): Call<List<MLDetailsResponse>>
 
     @GET("ml_getHerbalBenefits")
-    fun getHerbalBenefitsByName(@Query("mlHerbName") mlHerbName: String): Call<List<MLBenefitsResponse>>
+    fun getHerbalBenefitsByName(@Query("mlherbname") mlHerbName: String): Call<List<MLBenefitsResponse>>
 
     @GET("ml_getHerbalSteps")
-    fun getHerbalStepsByName(@Query("mlHerbName") mlHerbName: String): Call<List<MLStepsResponse>>
+    fun getHerbalStepsByName(@Query("mlherbname") mlHerbName: String): Call<List<MLStepsResponse>>
 
 }

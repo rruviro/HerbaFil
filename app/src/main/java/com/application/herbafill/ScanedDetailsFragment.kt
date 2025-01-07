@@ -46,7 +46,7 @@ class ScanedDetailsFragment : Fragment() {
         fetchHerbalBenefits(mlHerbName)
         fetchHerbalSteps(mlHerbName)
 
-        val userHistory = UserHistory(userID = userID, mlHerbName = mlHerbName)
+        val userHistory = UserHistory(userID = userID, mlherbname = mlHerbName)
         insert(userHistory)
 
         binding.back.setOnClickListener {
@@ -64,16 +64,16 @@ class ScanedDetailsFragment : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     val data = response.body() ?: emptyList()
-                    val item = data.find { it.mlHerbName == mlHerbName }
+                    val item = data.find { it.mlherbname == mlHerbName }
                     if (item != null) {
-                        binding.herbTitle.text = item.mlHerbName
-                        binding.HerbTitle.text = item.mlHerbName
+                        binding.herbTitle.text = item.mlherbname
+                        binding.HerbTitle.text = item.mlherbname
                         binding.recommend.text = item.recommended
                         binding.risky.text = item.risky
                         Glide.with(requireContext())
-                            .load(item.mlHerbImageUrl)
+                            .load(item.mlherbimageurl)
                             .into(binding.herbImage)
-                        binding.herbDescription.text = item.mlHerbDescription
+                        binding.herbDescription.text = item.mlherbdescription
                     } else {
                         Toast.makeText(context, "No data available for this herb", Toast.LENGTH_SHORT).show()
                     }
@@ -96,7 +96,7 @@ class ScanedDetailsFragment : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     val benefits = response.body() ?: emptyList()
-                    val filteredBenefits = benefits.filter { it.mlHerbName == mlHerbName }
+                    val filteredBenefits = benefits.filter { it.mlherbname == mlHerbName }
                     if (filteredBenefits.isNotEmpty()) {
                         benefitAdapter = MLHerbalBenifitAdapter(filteredBenefits)
                         binding.benifitHerbRecycleView.adapter = benefitAdapter
@@ -122,7 +122,7 @@ class ScanedDetailsFragment : Fragment() {
             ) {
                 if (response.isSuccessful) {
                     val steps = response.body() ?: emptyList()
-                    val filteredSteps = steps.filter { it.mlHerbName == mlHerbName }
+                    val filteredSteps = steps.filter { it.mlherbname == mlHerbName }
                     if (filteredSteps.isNotEmpty()) {
                         stepsAdapter = MLHerbalStepsAdapter(filteredSteps)
                         binding.stepCoreRecycleView.layoutManager = LinearLayoutManager(context)

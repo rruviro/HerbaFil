@@ -29,9 +29,9 @@ class HerbalBenifitAdapter(private val benefits: List<HerbalBenefitsResponse>) :
 
     override fun onBindViewHolder(holder: HerbalBenefitViewHolder, position: Int) {
         val benefit = benefits[position]
-        holder.benefitDescription.text = benefit.benefitDescription
+        holder.benefitDescription.text = benefit.benefitdescription
         Glide.with(holder.itemView.context)
-            .load(benefit.benefitImageUrl)
+            .load(benefit.benefitimageurl)
             .into(holder.benefitImage)
     }
 
@@ -56,10 +56,10 @@ class HerbalStepsAdapter(private val steps: List<HerbalStepsResponse>) :
 
     override fun onBindViewHolder(holder: HerbalStepsViewHolder, position: Int) {
         val step = steps[position]
-        holder.stepDescription.text = step.stepTitle
+        holder.stepDescription.text = step.steptitle
 
         // Ensure step.stepDetails is of type List<String>
-        val bulletAdapter = HerbalBulletAdapter(listOf(step.stepDetails))
+        val bulletAdapter = HerbalBulletAdapter(listOf(step.stepdetails))
         holder.bulletRecyclerView.layoutManager = LinearLayoutManager(holder.itemView.context)
         holder.bulletRecyclerView.adapter = bulletAdapter
     }

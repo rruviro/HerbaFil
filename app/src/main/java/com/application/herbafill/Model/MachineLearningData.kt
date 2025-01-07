@@ -1,24 +1,24 @@
 package com.application.herbafill.Model
 
 data class MLDetailsResponse(
-    val mlHerbId: Int,
-    val mlHerbName: String,
-    val mlHerbDescription: String,
-    val mlHerbImageUrl: String,
+    val mlherbid: Int,
+    val mlherbname: String,
+    val mlherbdescription: String,
+    val mlherbimageurl: String,
     val recommended: String,
     val risky: String
 )
 
 data class MLBenefitsResponse(
-    val mlBenefitId: Int,
-    val mlHerbName: String,
-    val mlBenefitDescription: String,
-    val mlBenefitImageUrl: String
+    val mlbenefitid: Int,
+    val mlherbname: String,
+    val mlbenefitdescription: String,
+    val mlbenefitimageUrl: String
 )
 
 data class MLStepsResponse(
-    val mlStepId: Int,
-    val mlHerbName: String,
-    val mlStepTitle: String,
-    val mlStepDetails: String
+    val mlstepid: Int,
+    val mlherbname: String,
+    val mlsteptitle: String,
+    val mlstepdetails: String
 )
