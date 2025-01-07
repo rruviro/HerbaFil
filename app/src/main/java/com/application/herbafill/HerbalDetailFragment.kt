@@ -39,8 +39,10 @@ class HerbalDetailFragment : Fragment() {
         fetchAndDisplayHerbalData(herbId)
 
         val userID = arguments?.getInt("userID") ?: return binding.root
+        val email = arguments?.getString("email") ?: return binding.root
         val bundle = Bundle().apply {
             putInt("userID", userID)
+            putString("email", email)
         }
 
         binding.back.setOnClickListener {

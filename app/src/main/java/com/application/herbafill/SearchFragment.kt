@@ -45,8 +45,10 @@ class SearchFragment : Fragment(), HerbalAdapter.OnItemClickListener {
         })
 
         val userID = arguments?.getInt("userID") ?: return binding.root
+        val email = arguments?.getString("email") ?: return binding.root
         val bundle = Bundle().apply {
             putInt("userID", userID)
+            putString("email", email)
         }
 
         binding.back.setOnClickListener {
@@ -85,9 +87,14 @@ class SearchFragment : Fragment(), HerbalAdapter.OnItemClickListener {
             Toast.makeText(requireContext(), "User ID is missing", Toast.LENGTH_SHORT).show()
             return
         }
+        val email = arguments?.getString("email") ?: run {
+            Toast.makeText(requireContext(), "User email is missing", Toast.LENGTH_SHORT).show()
+            return
+        }
         val childBundle = Bundle()
         childBundle.putInt("herbId", herbals.herbID)
         childBundle.putInt("userID", userID)
+        childBundle.putString("email", email)
         findNavController().navigate(R.id.action_searchFragment_to_herbalDetailFragment, childBundle)
     }
 

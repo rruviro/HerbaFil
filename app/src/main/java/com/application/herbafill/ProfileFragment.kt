@@ -2,6 +2,7 @@ package com.application.herbafill
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -26,17 +27,21 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.application.herbafill.Adapter.UserHistoryAdapter
 import com.application.herbafill.Api.ApiService
 import com.application.herbafill.Api.RetrofitClient
+import com.application.herbafill.Api.RetrofitClient.instance
 import com.application.herbafill.Model.Account
 import com.application.herbafill.Model.Herbals
 import com.application.herbafill.Model.UpdateResponse
 import com.application.herbafill.Model.UserHistoryDetail
 import com.application.herbafill.Model.UserHistoryResponse
-import com.application.herbafill.Model.UserProfile
+import com.application.herbafill.Model.UserImage
+import com.application.herbafill.Model.UserProfileUpdateRequest
 import com.application.herbafill.databinding.FragmentProfileBinding
 import com.bumptech.glide.Glide
+import com.google.firebase.database.FirebaseDatabase
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -69,11 +74,14 @@ class ProfileFragment : Fragment(), UserHistoryAdapter.OnItemClickListener {
         binding = FragmentProfileBinding.inflate(inflater, container, false)
 
         val userID = arguments?.getInt("userID") ?: return binding.root
+        val email = arguments?.getString("email") ?: return binding.root
         val bundle = Bundle().apply {
             putInt("userID", userID)
+            putString("email", email)
         }
 
         fetchData(userID)
+        fetchPersonalData(email)
 
         binding.imageButton.setOnClickListener {
             showImageOptions()
@@ -128,9 +136,11 @@ class ProfileFragment : Fragment(), UserHistoryAdapter.OnItemClickListener {
 
     override fun onItemClick(history: UserHistoryDetail) {
         val userID = arguments?.getInt("userID")
+        val email = arguments?.getString("email")
         val bundle = Bundle().apply {
             putString("mlHerbName", history.mlherbname)
             userID?.let { putInt("userID", it) }
+            putString("email", email)
         }
         findNavController().navigate(R.id.action_profileFragment_to_historyDetailFragment, bundle)
     }
@@ -147,10 +157,6 @@ class ProfileFragment : Fragment(), UserHistoryAdapter.OnItemClickListener {
 
                             binding.name.text = name
 
-                            Glide.with(requireContext())
-                                .load(userDetails?.userProfile)
-                                .placeholder(R.drawable.meditation)
-                                .into(binding.imageButton)
                         } else {
                             Toast.makeText(context, "No data found", Toast.LENGTH_SHORT).show()
                         }
@@ -313,15 +319,17 @@ class ProfileFragment : Fragment(), UserHistoryAdapter.OnItemClickListener {
             when (requestCode) {
                 REQUEST_IMAGE_CAPTURE -> {
                     val file = File(currentPhotoPath)
-                    val croppedBitmap = BitmapFactory.decodeFile(file.absolutePath)
-                    binding.imageButton.setImageBitmap(croppedBitmap)
+                    val imageUri = Uri.fromFile(file)  // Convert file to URI
+                    binding.imageButton.setImageURI(imageUri)
 
-                    val croppedFile = createTempFileFromBitmap(croppedBitmap)
+                    // Convert URI to Base64
+                    val base64Image = convertUriToBase64(imageUri)
                     val userID = arguments?.getInt("userID")
-                    if (userID != null && croppedFile != null) {
-                        uploadImageToServer(userID, croppedFile)
+                    val email = arguments?.getString("email")
+                    if (userID != null) {
+                        saveProfileImageToFirebase(email.toString(), base64Image)
                     } else {
-                        Toast.makeText(requireContext(), "Failed to save cropped image", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), "Failed to save image", Toast.LENGTH_SHORT).show()
                     }
                 }
                 REQUEST_PICK_IMAGE -> {
@@ -338,14 +346,20 @@ class ProfileFragment : Fragment(), UserHistoryAdapter.OnItemClickListener {
                             .load(croppedBitmap)
                             .into(binding.imageButton)
 
-                        val croppedImageFile = createTempFileFromBitmap(croppedBitmap)
-                        if (croppedImageFile != null) {
-                            val userID = arguments?.getInt("userID")
-                            if (userID != null) {
-                                uploadImageToServer(userID, croppedImageFile)
-                            }
-                        } else {
-                            Toast.makeText(context, "Failed to create file from bitmap", Toast.LENGTH_SHORT).show()
+                        // Convert cropped image to URI and then to Base64
+                        val tempFile = File(requireContext().cacheDir, "cropped_image.png")
+                        val outputStream = FileOutputStream(tempFile)
+                        croppedBitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+                        outputStream.close()
+                        val croppedUri = Uri.fromFile(tempFile)
+
+                        // Convert URI to Base64
+                        val base64Image = convertUriToBase64(croppedUri)
+
+                        val userID = arguments?.getInt("userID")
+                        val email = arguments?.getString("email")
+                        if (userID != null) {
+                            saveProfileImageToFirebase(email.toString(), base64Image)
                         }
                     } else {
                         Toast.makeText(context, "Failed to get cropped image", Toast.LENGTH_SHORT).show()
@@ -355,52 +369,58 @@ class ProfileFragment : Fragment(), UserHistoryAdapter.OnItemClickListener {
         }
     }
 
-    private fun createTempFileFromBitmap(bitmap: Bitmap): File? {
-        return try {
-            val tempFile = File.createTempFile("cropped_image", ".jpg", requireContext().cacheDir)
-            FileOutputStream(tempFile).use { outputStream ->
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream)
-            }
-            tempFile
-        } catch (e: IOException) {
-            e.printStackTrace()
-            null
-        }
-    }
-
-    // Convert image file to Base64 binary string
-    private fun encodeImageToBase64(imageFile: File): String {
-        val byteArray = FileInputStream(imageFile).use { inputStream ->
-            val byteArray = ByteArray(imageFile.length().toInt())
-            inputStream.read(byteArray)
-            byteArray
-        }
+    private fun convertUriToBase64(uri: Uri): String {
+        val bitmap = BitmapFactory.decodeStream(requireContext().contentResolver.openInputStream(uri))
+        val byteArrayOutputStream = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
+        val byteArray = byteArrayOutputStream.toByteArray()
         return Base64.encodeToString(byteArray, Base64.DEFAULT)
     }
 
-    private fun uploadImageToServer(userID: Int, imageFile: File) {
-        // Convert the image file to Base64 string
-        val base64Image = encodeImageToBase64(imageFile)
+    private fun fetchPersonalData(email: String) {
+        val sanitizedEmail = email.replace(".", "_") // Sanitize email to use as a key
+        val databaseRef = FirebaseDatabase.getInstance().reference
+            .child("users")
+            .child(sanitizedEmail)
 
-        // Create the request body
-        val uploadImageRequest = ApiService.UploadImageRequest(base64Image, userID)
+        // Fetch user data from Firebase
+        databaseRef.get().addOnSuccessListener { snapshot ->
+            val userImageBase64 = snapshot.child("userProfile").value as? String
+            if (userImageBase64 != null) {
+                // Decode Base64 string to byte array
+                val imageByteArray = Base64.decode(userImageBase64, Base64.DEFAULT)
 
-        // Call the API with the Base64 image and userId
-        RetrofitClient.instance.uploadImage(uploadImageRequest)
-            .enqueue(object : Callback<UpdateResponse> {
-                override fun onResponse(call: Call<UpdateResponse>, response: Response<UpdateResponse>) {
-                    if (response.isSuccessful && response.body()?.status == "success") {
-                        Toast.makeText(context, "Image uploaded successfully!", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Log.d("", userID.toString())
-                        Toast.makeText(context, "Failed to upload image", Toast.LENGTH_SHORT).show()
-                    }
+                // Load the image using Glide
+                Glide.with(this)
+                    .load(imageByteArray)
+                    .placeholder(R.drawable.meditation)
+                    .into(binding.imageButton) // Replace with your ImageView
+            } else {
+                // Handle case where userProfile is null
+                Log.e("ProfileFragment", "User profile image URL is null.")
+            }
+        }.addOnFailureListener { exception ->
+            // Handle any errors
+            Log.e("ProfileFragment", "Error fetching user data: ${exception.message}")
+        }
+    }
+
+    private fun saveProfileImageToFirebase(email: String, base64Image: String) {
+        val sanitizedEmail = email.replace(".", "_") // Sanitizing email
+        val databaseRef = FirebaseDatabase.getInstance().reference.child("users").child(sanitizedEmail)
+        // Fetch existing user data and update profile image
+        databaseRef.get().addOnSuccessListener { snapshot ->
+            val personalInfo = snapshot.getValue(UserImage::class.java)
+            personalInfo?.let {
+                val updatedInfo = it.copy(userProfile = base64Image)
+                // Update the user profile data in Firebase
+                databaseRef.setValue(updatedInfo).addOnSuccessListener {
+                    Log.d("ProfileFragment", "Profile image updated successfully.")
+                }.addOnFailureListener {
+                    Log.e("ProfileFragment", "Failed to update profile image: ${it.message}")
                 }
-
-                override fun onFailure(call: Call<UpdateResponse>, t: Throwable) {
-                    Toast.makeText(context, "Upload failed: ${t.message}", Toast.LENGTH_LONG).show()
-                }
-            })
+            }
+        }
     }
 
 }

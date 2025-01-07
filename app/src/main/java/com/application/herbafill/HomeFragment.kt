@@ -40,8 +40,10 @@ class HomeFragment : Fragment(), HerbalAdapter.OnItemClickListener {
         binding.herbalRecycleView.layoutManager = LinearLayoutManager(this.context)
 
         val userID = arguments?.getInt("userID") ?: return binding.root
+        val email = arguments?.getString("email") ?: return binding.root
         val bundle = Bundle().apply {
             putInt("userID", userID)
+            putString("email", email)
         }
 
         fetchData(userID)
@@ -133,9 +135,11 @@ class HomeFragment : Fragment(), HerbalAdapter.OnItemClickListener {
 
     override fun onItemClick(herbals: Herbals) {
         val userID = arguments?.getInt("userID")
+        val email = arguments?.getString("email")
         val bundle = Bundle().apply {
             putInt("herbId", herbals.herbID)
             userID?.let { putInt("userID", it) }
+            putString("email", email)
         }
         findNavController().navigate(R.id.action_homeFragment_to_herbalDetailFragment, bundle)
     }

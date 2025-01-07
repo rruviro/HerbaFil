@@ -52,8 +52,10 @@ class ScanFragment : Fragment() {
         binding = FragmentScanBinding.inflate(inflater, container, false)
 
         val userID = arguments?.getInt("userID") ?: return binding.root
+        val email = arguments?.getString("email") ?: return binding.root
         val childBundle = Bundle()
         childBundle.putInt("userID", userID)
+        childBundle.putString("email", email)
 
         try {
             interpreter = Interpreter(loadModelFile("classifier.tflite"))
@@ -197,9 +199,14 @@ class ScanFragment : Fragment() {
                     Toast.makeText(requireContext(), "User ID is missing", Toast.LENGTH_SHORT).show()
                     return
                 }
+                val email = arguments?.getString("email") ?: run {
+                    Toast.makeText(requireContext(), "User email is missing", Toast.LENGTH_SHORT).show()
+                    return
+                }
                 val childBundle = Bundle()
                 childBundle.putString("mlHerbName", resultText)
                 childBundle.putInt("userID", userID)
+                childBundle.putString("email", email)
 
                 if (childBundle.equals("Unknown")) {
                     Toast.makeText(requireContext(), "This image is not valid, Plase try again with other Image", Toast.LENGTH_SHORT).show()

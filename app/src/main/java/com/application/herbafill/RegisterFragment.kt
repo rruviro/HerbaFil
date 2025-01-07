@@ -10,7 +10,14 @@ import android.widget.Toast
 import androidx.navigation.fragment.findNavController
 import com.application.herbafill.Api.RetrofitClient
 import com.application.herbafill.Model.Authentication.SignUpResponse
+import com.application.herbafill.Model.CreateAccountRequest
+import com.application.herbafill.Model.CreateAccountResponse
+import com.application.herbafill.Model.OTPRequest
+import com.application.herbafill.Model.OTPResponse
+import com.application.herbafill.Model.UserImage
 import com.application.herbafill.databinding.FragmentRegisterBinding
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -40,11 +47,12 @@ class RegisterFragment : Fragment() {
 
         binding.registerButton.setOnClickListener {
             val name = binding.name.text.toString().trim()
+            val email = binding.email.text.toString().trim()
             val username = binding.username.text.toString().trim()
             val password = binding.password.text.toString().trim()
             val confirmPassword = binding.confirmPassword.text.toString().trim()
 
-            if (name.isEmpty() || username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
+            if (name.isEmpty() || email.isEmpty() || username.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {
                 Toast.makeText(requireContext(), "You're required to input your credentials.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
@@ -54,7 +62,7 @@ class RegisterFragment : Fragment() {
                 return@setOnClickListener
             }
 
-            registerUser(name, username, password)
+            checkable(name, email, username, password)
         }
 
         binding.loginButton.setOnClickListener {
@@ -64,26 +72,64 @@ class RegisterFragment : Fragment() {
         return binding.root
     }
 
-    private fun registerUser(name: String, username: String, password: String) {
-        RetrofitClient.instance.signUp(name, username, password)
-            .enqueue(object : Callback<SignUpResponse> {
-                override fun onResponse(call: Call<SignUpResponse>, response: Response<SignUpResponse>) {
-                    if (response.isSuccessful) {
-                        val responseBody = response.body()
-                        if (responseBody != null && responseBody.success) {
-                            Toast.makeText(context, "Sign-up successful!", Toast.LENGTH_SHORT).show()
-                            findNavController().navigate(R.id.action_registerFragment_to_loginFragment)
+    fun checkable(name: String, email: String, username: String, password: String) {
+        // Create request body
+        val request = CreateAccountRequest(name, email, username, password)
+        // Make API call
+        RetrofitClient.instance.checkable(request).enqueue(object : Callback<CreateAccountResponse> {
+            override fun onResponse(
+                call: Call<CreateAccountResponse>,
+                response: Response<CreateAccountResponse>
+            ) {
+                if (response.isSuccessful) {
+                    val responseBody = response.body()
+                    if (responseBody != null) {
+                        if (responseBody.success) {
+                            val bundle = Bundle().apply {
+                                putString("name", name)
+                                putString("email", email)
+                                putString("username", username)
+                                putString("password", password)
+                            }
+                            sendOTP(email)
+                            findNavController().navigate(R.id.action_registerFragment_to_otpFragment, bundle)
                         } else {
-                            Toast.makeText(context, responseBody?.message ?: "Sign-up failed", Toast.LENGTH_SHORT).show()
+                            // Handle failure (Username or email already exists)
+                            Toast.makeText(requireContext(), responseBody.message, Toast.LENGTH_SHORT).show()
                         }
-                    } else {
-                        Toast.makeText(context, "Server error: ${response.code()}", Toast.LENGTH_SHORT).show()
                     }
+                } else {
+                    // Handle server error
+                    println("Server error: ${response.message()}")
                 }
+            }
 
-                override fun onFailure(call: Call<SignUpResponse>, t: Throwable) {
-                    Toast.makeText(context, "Network error: ${t.message}", Toast.LENGTH_SHORT).show()
-                }
-            })
+            override fun onFailure(call: Call<CreateAccountResponse>, t: Throwable) {
+                // Handle failure
+                println("Network error: ${t.message}")
+            }
+        })
     }
+
+    private fun sendOTP(email: String) {
+        val otpService = RetrofitClient.instance
+        val call = otpService.sendOTP(OTPRequest(email))
+
+        call.enqueue(object : Callback<OTPResponse> {
+            override fun onResponse(call: Call<OTPResponse>, response: Response<OTPResponse>) {
+                if (response.isSuccessful) {
+                    Toast.makeText(requireContext(), "OTP sent successfully", Toast.LENGTH_SHORT).show()
+                    println("OTP: ${response.body()?.otp}")
+                } else {
+                    Toast.makeText(requireContext(), "Failed to send OTP: ${response.message()}", Toast.LENGTH_SHORT).show()
+                    println("Error code: ${response.code()}")
+                }
+            }
+
+            override fun onFailure(call: Call<OTPResponse>, t: Throwable) {
+                Toast.makeText(requireContext(), "Error: ${t.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
 }

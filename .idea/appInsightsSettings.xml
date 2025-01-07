@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.application.herbafill" />
+                  <option name="mobileSdkAppId" value="1:1050612014926:android:472c93a11ebd3eabb3881f" />
+                  <option name="projectId" value="herbafil-e6526" />
+                  <option name="projectNumber" value="1050612014926" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

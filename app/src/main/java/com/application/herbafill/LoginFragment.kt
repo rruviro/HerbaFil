@@ -45,6 +45,10 @@ class LoginFragment : Fragment() {
 
         }
 
+        binding.forgot.setOnClickListener {
+            findNavController().navigate(R.id.action_loginFragment_to_forgotFragment)
+        }
+
         binding.createButton.setOnClickListener {
             findNavController().navigate(R.id.action_loginFragment_to_registerFragment)
         }
@@ -73,6 +77,7 @@ class LoginFragment : Fragment() {
                         if (loginResponse?.status == "success") {
                             val bundle = Bundle().apply {
                                 putInt("userID", loginResponse.userID)
+                                putString("email", loginResponse.email)
                             }
                             findNavController().navigate(R.id.action_loginFragment_to_homeFragment, bundle)
                         } else {

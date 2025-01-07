@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "1050612014926",
+    "firebase_url": "https://herbafil-e6526-default-rtdb.firebaseio.com",
+    "project_id": "herbafil-e6526",
+    "storage_bucket": "herbafil-e6526.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1050612014926:android:472c93a11ebd3eabb3881f",
+        "android_client_info": {
+          "package_name": "com.application.herbafill"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhPzlywFVy1nLXbJLSavoRfyw5Q-mtb58"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1050612014926:android:055703c48c0be247b3881f",
+        "android_client_info": {
+          "package_name": "com.example.herbafil"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhPzlywFVy1nLXbJLSavoRfyw5Q-mtb58"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

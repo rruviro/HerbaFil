@@ -52,110 +52,145 @@
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:text="Register Now"
         android:textColor="@color/primary"
         android:textSize="25dp"
         android:textStyle="bold"
-        android:layout_marginTop="30dp"
-        app:layout_constraintStart_toStartOf="@+id/username"
+        app:layout_constraintStart_toStartOf="@+id/registerButton"
         app:layout_constraintTop_toTopOf="@+id/panel" />
 
     <TextView
         android:id="@+id/textView12"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/primary"
-        android:textSize="12dp"
         android:layout_marginTop="5dp"
         android:text="Discover reliable information and effective usage guidelines for treating your health with herbs."
+        android:textColor="@color/primary"
+        android:textSize="12dp"
         app:layout_constraintStart_toStartOf="@+id/textView11"
         app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
-    <EditText
-        android:id="@+id/name"
+    <ScrollView
+        android:id="@+id/container"
         android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:elegantTextHeight="true"
-        android:ems="10"
-        android:hint="Name"
-        android:inputType="text"
-        android:textColor="@color/black"
-        android:textColorHint="#9C000000"
-        android:textSize="13sp"
-        android:drawableLeft="@drawable/id"
-        android:drawablePadding="10dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+        android:layout_height="200dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="@+id/registerButton"
+        app:layout_constraintStart_toStartOf="@+id/registerButton"
+        app:layout_constraintTop_toBottomOf="@+id/textView12">
 
-    <EditText
-        android:id="@+id/username"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:drawableLeft="@drawable/person"
-        android:drawablePadding="10dp"
-        android:elegantTextHeight="true"
-        android:ems="10"
-        android:hint="Username"
-        android:inputType="text"
-        android:textColor="@color/black"
-        android:textColorHint="#9C000000"
-        android:textSize="13sp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:elegantTextHeight="true"
-        android:ems="10"
-        android:hint="Password"
-        android:textColor="@color/black"
-        android:inputType="textPassword"
-        android:textColorHint="#9C000000"
-        android:textSize="13sp"
-        android:drawableLeft="@drawable/authkey"
-        android:drawablePadding="10dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/username" />
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:drawableLeft="@drawable/id"
+                android:drawablePadding="10dp"
+                android:elegantTextHeight="true"
+                android:ems="10"
+                android:hint="Name"
+                android:inputType="text"
+                android:textColor="@color/black"
+                android:textColorHint="#9C000000"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.495"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/eyeToggle"
-        android:layout_width="19dp"
-        android:layout_height="19dp"
-        android:layout_marginEnd="10dp"
-        android:background="@drawable/selector_eye"
-        app:layout_constraintBottom_toBottomOf="@+id/password"
-        app:layout_constraintEnd_toEndOf="@+id/password"
-        app:layout_constraintTop_toTopOf="@+id/password" />
+            <EditText
+                android:id="@+id/username"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:drawableLeft="@drawable/person"
+                android:drawablePadding="10dp"
+                android:elegantTextHeight="true"
+                android:ems="10"
+                android:hint="Username"
+                android:inputType="text"
+                android:textColor="@color/black"
+                android:textColorHint="#9C000000"
+                android:textSize="13sp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.495"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/name" />
 
-    <EditText
-        android:id="@+id/confirm_password"
-        android:layout_width="300dp"
-        android:layout_height="50dp"
-        android:elegantTextHeight="true"
-        android:ems="10"
-        android:hint="Confirm Password"
-        android:textColor="@color/black"
-        android:inputType="textPassword"
-        android:textColorHint="#9C000000"
-        android:textSize="13sp"
-        android:drawableLeft="@drawable/authkey"
-        android:drawablePadding="10dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password" />
+            <EditText
+                android:id="@+id/email"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:drawableLeft="@drawable/person"
+                android:drawablePadding="10dp"
+                android:elegantTextHeight="true"
+                android:ems="10"
+                android:hint="Email"
+                android:inputType="text"
+                android:textColor="@color/black"
+                android:textColorHint="#9C000000"
+                android:textSize="13sp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.495"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/username" />
+
+            <EditText
+                android:id="@+id/password"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:elegantTextHeight="true"
+                android:ems="10"
+                android:hint="Password"
+                android:textColor="@color/black"
+                android:inputType="textPassword"
+                android:textColorHint="#9C000000"
+                android:textSize="13sp"
+                android:drawableLeft="@drawable/authkey"
+                android:drawablePadding="10dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.495"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/email" />
+
+            <TextView
+                android:id="@+id/eyeToggle"
+                android:layout_width="19dp"
+                android:layout_height="19dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/selector_eye"
+                app:layout_constraintBottom_toBottomOf="@+id/password"
+                app:layout_constraintEnd_toEndOf="@+id/password"
+                app:layout_constraintTop_toTopOf="@+id/password" />
+
+            <EditText
+                android:id="@+id/confirm_password"
+                android:layout_width="300dp"
+                android:layout_height="50dp"
+                android:elegantTextHeight="true"
+                android:ems="10"
+                android:hint="Confirm Password"
+                android:textColor="@color/black"
+                android:inputType="textPassword"
+                android:textColorHint="#9C000000"
+                android:textSize="13sp"
+                android:drawableLeft="@drawable/authkey"
+                android:drawablePadding="10dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.495"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/password" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/registerButton"
@@ -165,7 +200,7 @@
         android:background="@drawable/authentication_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/confirm_password">
+        app:layout_constraintTop_toBottomOf="@+id/container">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"

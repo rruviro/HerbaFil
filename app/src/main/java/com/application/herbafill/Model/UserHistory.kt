@@ -5,7 +5,7 @@ import kotlinx.parcelize.Parcelize
 
 data class UserHistory(
     val userID: Int,
-    val mlherbname: String
+    val mlHerbName: String
 )
 
 @Parcelize

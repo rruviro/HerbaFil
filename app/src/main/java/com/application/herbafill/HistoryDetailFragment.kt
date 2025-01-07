@@ -36,8 +36,10 @@ class HistoryDetailFragment : Fragment() {
         binding = FragmentHistoryDetailBinding.inflate(inflater, container, false)
         val mlHerbName = arguments?.getString("mlHerbName") ?: return binding.root
         val userID = arguments?.getInt("userID") ?: return binding.root
+        val email = arguments?.getString("email") ?: return binding.root
         val childBundle = Bundle()
         childBundle.putInt("userID", userID)
+        childBundle.putString("email", email)
 
         binding.herbTitle.text = mlHerbName
         binding.HerbTitle.text = mlHerbName

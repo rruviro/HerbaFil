@@ -14,7 +14,24 @@ data class Account(
     val userProfile: String,
 )
 
-data class UserProfile(
-    val userID: Int,
-    val userImage: String
+data class UserProfileUpdateRequest(
+    val userId: String,
+    val userProfile: String
+)
+
+data class CreateAccountRequest(
+    val name: String,
+    val email: String,
+    val username: String,
+    val password: String
+)
+
+data class CreateAccountResponse(
+    val success: Boolean,
+    val message: String
+)
+
+data class UserImage(
+    val email: String = "",
+    val userProfile: String = ""
 )

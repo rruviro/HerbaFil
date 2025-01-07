@@ -6,16 +6,27 @@ import com.application.herbafill.Model.HerbalDetailResponse
 import com.application.herbafill.Model.HerbalStepsResponse
 import com.application.herbafill.Model.Authentication.LoginResponse
 import com.application.herbafill.Model.Authentication.SignUpResponse
+import com.application.herbafill.Model.CreateAccountRequest
+import com.application.herbafill.Model.CreateAccountResponse
 import com.application.herbafill.Model.Herbals
 import com.application.herbafill.Model.MLBenefitsResponse
 import com.application.herbafill.Model.MLDetailsResponse
 import com.application.herbafill.Model.MLStepsResponse
+import com.application.herbafill.Model.OTPForgotVerifyRequest
+import com.application.herbafill.Model.OTPForgotVerifyResponse
+import com.application.herbafill.Model.OTPRequest
+import com.application.herbafill.Model.OTPResponse
+import com.application.herbafill.Model.OTPVerifyRequest
+import com.application.herbafill.Model.OTPVerifyResponse
+import com.application.herbafill.Model.ResetPasswordRequest
+import com.application.herbafill.Model.ResetPasswordResponse
 import com.application.herbafill.Model.UpdateResponse
 import com.application.herbafill.Model.UserHistory
 import com.application.herbafill.Model.UserHistoryResponse
-import com.application.herbafill.Model.UserProfile
+import com.application.herbafill.Model.UserProfileUpdateRequest
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Field
@@ -51,20 +62,34 @@ interface ApiService {
         @Field("password") password: String
     ): Call<UpdateResponse>
 
-    data class UploadImageRequest(
-        val userprofile: String,  // Base64 image string
-        val userid: Int           // User ID
-    )
+    @POST("updateProfile")
+    fun updateUserProfile(@Body request: UserProfileUpdateRequest): Call<ResponseBody>
 
-    @POST("update_userprofile")
-    fun uploadImage(
-        @Body uploadImageRequest: UploadImageRequest
-    ): Call<UpdateResponse>
+    @POST("/send-otp")
+    fun sendOTP(@Body request: OTPRequest): Call<OTPResponse>
+
+    @POST("/verify-otp")
+    fun verifyOTP(@Body request: OTPVerifyRequest): Call<OTPVerifyResponse>
+
+    @POST("/forgot-send-otp")
+    fun forgotSendOTP(@Body request: OTPRequest): Call<OTPResponse>
+
+    @POST("/reset-password")
+    fun resetPassword(
+        @Body request: ResetPasswordRequest
+    ): Call<ResetPasswordResponse>
+
+    @POST("/forgot-verify-otp")
+    fun forgotVerifyOTP(@Body request: OTPForgotVerifyRequest): Call<OTPForgotVerifyResponse>
+
+    @POST("/checkable")
+    fun checkable(@Body request: CreateAccountRequest): Call<CreateAccountResponse>
 
     @FormUrlEncoded
     @POST("createAcc")
     fun signUp(
         @Field("name") name: String,
+        @Field("email") email: String,
         @Field("username") username: String,
         @Field("password") password: String
     ): Call<SignUpResponse>
