@@ -62,6 +62,11 @@ class RegisterFragment : Fragment() {
                 return@setOnClickListener
             }
 
+            if (!isValidPassword(password)) {
+                Toast.makeText(requireContext(), "Password must be between 8 and 16 characters, and contain at least one uppercase letter, one lowercase letter, and one symbol.", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+
             checkable(name, email, username, password)
         }
 
@@ -70,6 +75,11 @@ class RegisterFragment : Fragment() {
         }
 
         return binding.root
+    }
+
+    fun isValidPassword(password: String): Boolean {
+        val regex = "^(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!])[A-Za-z\\d@#$%^&+=!]{8,16}$"
+        return password.matches(regex.toRegex())
     }
 
     fun checkable(name: String, email: String, username: String, password: String) {
