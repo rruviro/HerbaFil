@@ -208,17 +208,16 @@ class ScanFragment : Fragment() {
                 childBundle.putInt("userID", userID)
                 childBundle.putString("email", email)
 
-                if (childBundle.equals("Unknown")) {
+                if (resultText == "Unknown") {
                     Toast.makeText(requireContext(), "This image is not valid, Plase try again with other Image", Toast.LENGTH_SHORT).show()
                 } else {
+//                    Toast.makeText(requireContext(), resultText, Toast.LENGTH_SHORT).show()
                     findNavController().navigate(R.id.action_scanFragment_to_scanedDetailsFragment, childBundle)
                 }
 
             } else {
                 binding.classificationResult.text = "Error: No valid prediction"
             }
-
-
 
         } catch (e: Exception) {
             e.printStackTrace()
